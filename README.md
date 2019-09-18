@@ -1,52 +1,45 @@
 
 <a href="https://nats.io"><img src="nats-horizontal-color.png" width="350" height="90" title="NATS Logo">
 </a>
-# The Importance of Messaging
+# 消息传递的重要性
 
-Developing and deploying applications and services that communicate in distributed systems
-can be complex and difficult.  However there are two basic patterns, request/reply or RPC for services,
-and event and data streams. A modern technology should provide
-features to make this easier, scalable, secure, location independent and observable.
+开发并且部署分布式系统中的应用和服务可能是复杂的困难的.系统交互有两种模式:一种是请求响应式或者微服务的RPC调用,另外一种是事件和数据流.
+现代技术应该提供一些特性使得简单、可扩展、安全、位置无依赖、可以监控。
 
-## Distributed Computing Needs of Today
+## 今天的分布式计算需求
 
-A modern messaging system needs to support multiple communication patterns, be
-secure by default, support multiple qualities of service, and provide secure
-multi-tenancy for a truly shared infrastructure. A modern system needs to include:
+现代消息系统需要支持多种交互模式，默认是安全的，支持多种服务质量，多租户共享的，可信赖的，安全的。现代系统包括：
 
-* Secure by default communications for microservices, edge platforms and devices
-* Secure multi-tenancy in a single distributed communication technology
-* Transparent location addressing and discovery
-* Resiliency with an emphasis on the overall health of the system
-* Ease of use for agile development, CI/CD, and operations, at scale
-* Highly scalable and performant with built-in load balancing and dynamic auto-scaling
-* Consistent identity and security mechanisms from edge devices to backend services
+* 微服务中，或者边缘计算中平台与设备通信默认是安全的
+* 在一个单独的分布式交互技术保护多租户
+* 透明的位置注册与发现
+* 弹性，强调系统的整体健康状况
+* 大规模使用简单，在敏捷开发、持续集成、运维的时候
+* 具有内置负载平衡和动态自动缩放功能，具有高度可扩展性和高性能
+* 从边缘设备到后端服务的一致标识和安全机制
 
 ## NATS
 
-NATS was built to meet the distributed computing needs of today and tomorrow.
-NATS is simple and secure messaging made for developers and operators who want
-to spend more time developing modern applications and services than worrying
-about a distributed communication system.
+NATS 的建立是为了满足当前和未来的分布式计算需求。
+NATS 为开发者和运维人员提供安全的、简单的消息传递。这样才能够花更多的时间开发现代的应用和微服务，而不用担心分布式系统消息传递的问题。
 
-* Easy to use for developers and operators
-* High-Performance
-* Always on and available
-* Extremely lightweight
-* At Most Once and At Least Once Delivery
-* Support for Observable and Scalable Services and Event/Data Streams
-* Client support for over 30 different programming languages
-* Cloud Native, a CNCF project with Kubernetes and Prometheus integrations
+* 易于使用，对开发人员和运维人员
+* 高性能
+* 总是在线可用
+* 非常轻量级
+* 支持最多一次和最少一次消息传递
+* 支持可监控的、可扩展的微服务和事件/数据流
+* 超过30种语言的客户端支持
+* 原生云，一个 CNCF 项目，集成了 Kubernetes 和 Prometheus 
 
 ## Use Cases
 
-NATS can run anywhere, from large servers and cloud instances, through edge
-gateways and even IoT devices.  Use cases for NATS include:
+NATS 可以运行在任何地方：大的服务器、云主机、边缘网关、物联网设备。使用 NATS 的情况包括：
 
-* Cloud Messaging
-  * Services (microservices, service mesh)
-  * Event/Data Streaming (observability, analytics, ML/AI)
-* Command and Control
-  * IoT and Edge
-  * Telemetry / Sensor Data / Command and Control
-* Augmenting or Replacing Legacy Messaging Systems
+* 云消息传递
+  * 服务之间传递消息(微服务，服务网格)
+  * 事件/数据流(可监控，分析，人工智能)
+* 命令和控制
+  * 物联网和边缘计算
+  * 遥测、传感器数据、命令和控制
+* 扩展或者替换遗留消息系统
