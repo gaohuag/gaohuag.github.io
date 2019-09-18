@@ -1,16 +1,14 @@
-# What's New in NATS 2.0
+# NATS 2.0 的新特性
 
-NATS 2.0 is the largest feature release since the original code base for the
-server was released. NATS 2.0 was created to allow a new way of thinking about
-NATS as a shared utility, solving problems at scale through distributed
-security, multi-tenancy, larger networks, and secure sharing of data.
+NATS 2.0 包含了很多新特性。NATS 2.0 被创建允许一种新的方式思考关于
+NATS 作为一个共享程序, 解决很多了关于分布式、安全、多租户、大网络、安全共享数据问题。
 
-## Rationale
+## 基本原理
 
-NATS 2.0 was created to address problems in large scale distributed computing.
+NATS 2.0 的创建是为了解决大规模分布式计算中的问题。
 
-It is difficult at best to combine identity management end-to-end
-(or end-to-edge), with data sharing, while adhering to policy and compliance.
+很难去最好的合并管理 end-to-end
+(或者 end-to-edge), 关于数据共享，with data sharing, while adhering to policy and compliance.
 Current distributed systems increase significantly in operational complexity
 as they scale upward.  Problems arise around service discovery, connectivity,
 scaling for volume, and application onboarding and updates.
@@ -21,24 +19,24 @@ and money.  They become fragile making it difficult to deploy services and
 applications hindering innovation, increasing time to value and total cost
 of ownership.
 
-We decided to:
+我们决定:
 
 * __Reduce total cost of ownership__:  Users want reduced TCO for their
 distributed systems.  This is addressed by an easy to use technology that
-can operate at global scale with simple configuration and a resilient
-and cloud-native architecture.
+can operate at global scale with 简单的配置 and a resilient
+and 原生云架构.
 * __Decrease Time to Value__:  As systems scale, _time to value_ increases.
 Operations resist change due to risk in touching a complex and fragile
 system.  Providing isolation contexts can help mitigate this.
-* __Support manageable large scale deployments__:  No data silos defined by
+* __支持可管理的大规模部署__:  No data silos defined by
 software, instead easily managed through software to provide exactly what the
 business needs.  We wanted to provide easy to configure disaster recovery.
 * __Decentralize security__:  Provide security supporting one
 technology end-to-end where organizations may self-manage making it
-easier to support a massive number of endpoints.
+easier to 支持大量端点。
 
 To achieve this, we added a number of new features that are transparent
-to existing clients with 100% backward client compatibility.
+to 100% 向后兼容现有客户端。
 
 ## Accounts
 

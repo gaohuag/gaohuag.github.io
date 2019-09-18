@@ -1,20 +1,25 @@
-## NATS Client Development Guide
+## NATS 客户端开发指南
 
-This guide provides you with considerations for developing NATS clients, including:
+本指南提供了开发 NATS 客户端的注意事项，包括:
 
-- CONNECT handling
-- Authorization
-- Verbose (acks)
-- Pedantic mode
-- Ping/pong interval
-- Parsing the protocol
-- Deciding on a parsing strategy
-- Storing and dispatching subscription callbacks
-- Implementing requests/response
-- Error handling, disconnecting and reconnecting
-- Cluster support
+- 连接处理
+- 认证
+- 详细模式 (acks)
+- 迂腐模式
+- Ping/pong 间隔
+- 解析协议
+- 确定解析策略
+- 存储和分发订阅回调
+- 实现请求和响应
+- 错误处理，断开连接和重新连接
+- 集群支持
 
-Probably the best way to learn about implementing a client is to look at one of the client's maintained by the Synadia team. These clients are generally full featured, so if you can use them, that is even better, but if you have to write a client these may go beyond your needs while still capturing many of the design considerations discussed here.
+学习实现一个客户端最好的方式是学习由 Synadia 团队维护的任何一个客户端。
+这些客户端通常功能齐全，所以如果你能使用它们，那就更好了，
+
+但是如果你必须编写一个客户端，这些可能会超出你的需要，同时仍然捕获了许多
+
+这里讨论设计的注意事项。
 
 - [go](https://github.com/nats-io/nats.go)
 - [node](https://github.com/nats-io/nats.js)
@@ -26,45 +31,54 @@ Probably the best way to learn about implementing a client is to look at one of 
 - [ruby](https://github.com/nats-io/nats.rb)
 - [c](https://github.com/nats-io/nats.c)
 
-## Client connection options
+## 客户端连接选项
 
-Clients can connect in authenticated or unauthenticated mode, as well as verbose mode which enables acknowledgements. See the [protocol documentation](/nats_protocol/nats-protocol.md#connect) for details.
+客户端可以使用认证或者不认证模式连接, 还有启动确认的详细模式. 有关详细信息，请参阅[协议文档](/nats_protocol/nats-protocol.md#connect)。
 
-## Client authorization
+## 启动确认
 
-By default clients can connect to the server in unauthenticated mode. You can configure the NATS server to require password authentication to connect.
+默认情况下，客户端可以以未经身份验证的模式连接到服务器。您可以将NATS服务器配置为需要密码身份验证才能连接。
 
-For example, using the command line:
+
+
+例如，使用命令行:
 
 ```
 nats-server -DV -m 8222 -user foo -pass bar
 ```
 
-The client must then authenticate to connect to the server. For example:
+然后，客户机必须进行身份验证才能连接到服务器。例如:
 
 ```
 nats.Connect("nats://foo:bar@localhost:4222")
 ```
 
-## Verbose mode
+## 详细模式
 
-When 'verbose' is enabled (via the `CONNECT` message), the NATS server will return `+OK` to acknowledge receipt of a valid protocol message. The NATS server automatically runs in verbose mode. Most client implementations disable verbose mode (set it to `false` in the `CONNECT` message) for performance reasons.
+当启用“详细”(在“CONNECT”消息中启用)时，NATS服务器将返回“+OK”以确认收到了有效的协议消息。NATS服务器自动以详细模式运行。
+由于性能原因，大多数客户端实现禁用了详细模式(在“CONNECT”消息中将其设置为“false”)。
 
-## Pedantic mode
 
-A client may also support 'pedantic' mode. Pedantic mode indicates to the server that strict protocol enforcement is required.
+## 迂腐模式
 
-## Ping/pong interval
+客户端也可能支持“迂腐”模式。迂腐模式向服务器表明需要严格的协议执行。
 
-NATS implements auto-pruning. When a client connects to the server, the server expects that client to be active. Periodically, the NATS server pings each subscriber, expecting a reply. If there is no reply within the configurable time limit, the server disconnects the client.
+## Ping/pong 时间间隔
 
-## Parsing the protocol
+NATS实现请。当客户端连接到服务器时，服务器期望该客户机是活动的。每隔一段时间，NATS服务器就会ping每个订阅者，等待一个回复。
+如果在配置的超时时间内没有响应，服务器将断开客户端的连接。
 
-NATS provides a text-based message format. The text-based [protocol](/documentation/internals/nats-protocol/) makes it easy to implement NATS clients. The key consideration is deciding on a parsing strategy.
+## 解析协议
 
-The NATS server implements a [zero allocation byte parser](https://youtu.be/ylRKac5kSOk?t=10m46s) that is fast and efficient. Off the wire, a NATS message is simply a slice of bytes. Across the wire the message is transported as an immutable string over a TCP connection. It is up to the client to implement logic to parse the message.
+NATS提供了一种基于文本的消息格式。基于文本的[协议](/documentation/internal als/nat -protocol/)使实现NATS客户端变得很容易。
+关键的考虑是决定一个解析策略。
 
-The NATS message structure includes the Subject string, an optional Reply string, and an optional Data field that is a byte array. The type `Msg` is a structure used by Subscribers and PublishMsg().
+NATS服务器实现了一个快速高效的[零分配字节解析器](https://youtu.be/ylRKac5kSOk?t=10m46s)。离线时，NATS消息是字节slice。
+在网络上，消息通过TCP连接以不可变字符串的形式传输。由客户端实现解析消息的逻辑。
+
+
+
+NATS消息结构包括主题字符串、一个可选的回复字符串和一个可选的数据字段(字节数组)。类型“Msg”是订阅者和PublishMsg()使用的结构。
 
 ```
 type Msg struct {
@@ -74,33 +88,30 @@ type Msg struct {
     Sub     *Subscription
 }
 ```
+NATS发布者将数据参数发布到给定的主题。数据参数保持不变，需要在接收端正确解释。客户端如何解析 NATS 消息取决于编程语言。
 
-A NATS publisher publishes the data argument to the given subject. The data argument is left untouched and needs to be correctly interpreted on the receiver. How the client parses a NATS message depends on the programming language.
+## 决定解析策略
 
-## Deciding on a parsing strategy
+通常，NATS客户端的协议解析是一个字符串操作。例如，在Python中，字符串操作比正则表达式更快。Go和Java客户机还使用字符串操作来解析消息。
+但是Ruby客户端使用正则解析协议，因为在Ruby中，正则比字符串操作更快。
 
-Generally, protocol parsing for a NATS client is a string operation. In Python, for example, string operations are faster than regex. The Go and Java clients also use string operations to parse the message. But, if you look at the Ruby client, regex is used to parse the protocol because in Ruby regex is faster that string operations.
+总之，不同的编程语言使用不同的解析方法。所以，在编写客户端时需要考虑如何解析消息。
 
-In sum, there is no magic formula for parsing—it depends on the programming language. But, you need to take into consideration how you are going to parse the message when you write a client.
+## 存储和分发订阅回调
+  
+在订阅服务时，需要存储和分发回调处理程序。在客户端，您需要这个数据结构的哈希映射。哈希映射将存储订阅ID映射到订阅的回调。
+   
+哈希映射的键是订阅ID。该键用于在哈希映射中查找回调。在离线处理NATS消息时， 将参数subject、reply subject和有效数据传递给回调处理程序，
+回调处理程序执行其任务。因此，必须存储订阅ID到回调函数的映射。在订阅中有回调。
+  
+## 实现请求/响应
+   
+何时使用发布/订阅和请求/响应取决于您的用例。运行这些教程，了解每种实现风格之间的差异。
 
-## Storing and dispatching subscription callbacks
+## 错误处理、断开连接和重新连接
 
-When you make a subscription to the server, you need to store and dispatch callback handlers.
+错误处理的注意事项主要包括处理客户端断开连接和实现重试逻辑。
 
-On the client side, you need a hash map for this data structure. The hash map will be storing the callback that maps the subscription ID to the subscription.
+## 集群支持
 
-The key of the hash map is the subscription ID. The key is used to look up the callback in the hash map. When you process the NATS message off the wire, you pass the parameters subject, reply subject, and the payload to the callback handler, which does its work.
-
-Thus, you must store the mapping of subscription ID to the callback. Inside the subscription you have the callback.
-
-## Implementing request/response
-
-When to use pub/sub vs. req/rep depends on your use case. Run the tutorials for each to understand the differences between each style of implementation.
-
-## Error handling, disconnecting and reconnecting
-
-Considerations for error handling primarily include handling client disconnections and implementing retry logic.
-
-## Cluster support
-
-The NATS client has reconnection logic. So, if you are implementing clustering, you need to implement reconnect callbacks a priori, meaning you cannot modify it during runtime. When you start it, you need to have that information already.
+NATS客户端具有重连接逻辑。因此，如果您正在实现集群，则需要预先实现重连回调，这意味着您不能在运行时修改它。当您开始时，您需要已经拥有这些信息。
