@@ -1,97 +1,105 @@
-## Client Protocol
+## 客户端协议
 
-The wire protocol used to communicate between the NATS server and clients is a simple, text-based publish/subscribe style protocol. Clients connect to and communicate with `nats-server` (the NATS server) through a regular TCP/IP socket using a small set of protocol operations that are terminated by a new line.
+用于NATS服务器和客户端之间通信的wire协议是一个简单的、基于文本的发布/订阅样式协议。
+客户端通过一个常规的TCP/IP套接字连接到“nat-server”(NATS服务器)并与之通信，使用新行终止协议操作。
 
-Unlike traditional messaging systems that use a binary message format that require an API to consume, the text-based NATS protocol makes it easy to implement clients in a wide variety of programming and scripting languages. In fact, refer to the topic [NATS Protocol Demo](nats-protocol-demo.md) to play with the NATS protocol for yourself using telnet.
+与传统的消息传递系统使用二进制消息格式(需要使用API)不同，基于文本的NATS协议使得用各种编程和脚本语言实现客户端变得很容易。
+实际上，请参考主题[NATS协议演示](nats-protocol-demo.md)，使用telnet亲自体验NATS协议。
 
-The NATS server implements a [zero allocation byte parser](https://youtu.be/ylRKac5kSOk?t=10m46s) that is fast and efficient.
+NATS服务器实现了一个快速高效的[零分配字节解析器](https://youtu.be/ylRKac5kSOk?t=10m46s)。
 
-## Protocol conventions
+## 协议约定
 
-**Control line w/Optional Content**: Each interaction between the client and server consists of a control, or protocol, line of text followed, optionally by message content. Most of the protocol messages don't require content, only `PUB` and `MSG` include payloads.
+**控制行 w/可选内容**: 客户端与服务器端之间的每一次交互根据消息内容选择由一个控制或者协议，后面跟着文本行。
+大部分的协议消息不需要内容，仅仅包含 `PUB` 和 `MSG` 有效负荷.
 
-**Field Delimiters**: The fields of NATS protocol messages are delimited by whitespace characters '` `' (space)  or `\t` (tab). Multiple whitespace characters will be treated as a single field delimiter.
+**字段分隔符**: NATS 协议消息的字段使用空白字符 '` `' (空格)  or `\t` (tab)分割。
+ 多个空白字符会被当做一个字符分隔符。
 
-**Newlines**: NATS uses `CR` followed by `LF` (`CR+LF`, `\r\n`, `0x0D0A`) to terminate protocol messages. This newline sequence is also used to mark the end of the message payload in a `PUB` or `MSG` protocol message.
+**新行**: NATS 使用 `CR` 跟着 `LF` (`CR+LF`, `\r\n`, `0x0D0A`) 终止协议消息。在 `PUB` or `MSG` 协议消息中新行序列也用来标识消息负荷结束.
 
-**Subject names**: Subject names, including reply subject (INBOX) names, are case-sensitive and must be non-empty alphanumeric strings with no embedded whitespace. All ascii alphanumeric characters except spaces/tabs and separators which are "." and ">" are allowed. Subject names can be optionally token-delimited using the dot character (`.`), e.g.:
+**主题名称**: 主题名称, 包括回复主题(收件箱) 名称, 是大小写敏感的并且必须是非空的不包含空白字符的字母数字字符串。
+所有的 ascii 字母数字字符除了 spaces/tabs 并且允许使用"." and ">" 分割主题。
+例如:
 
-`FOO`, `BAR`, `foo.bar`, `foo.BAR`, `FOO.BAR` and `FOO.BAR.BAZ` are all valid subject names
+`FOO`, `BAR`, `foo.bar`, `foo.BAR`, `FOO.BAR` 和 `FOO.BAR.BAZ` 都是有效的主题名
 
-`FOO. BAR`, `foo. .bar` and`foo..bar` are *not* valid subject names
+`FOO. BAR`, `foo. .bar` 和 `foo..bar` *不是* 有效的主题名
 
 A subject is comprised of 1 or more tokens. Tokens are separated by "." and can be any non space ascii alphanumeric character. The full wildcard token ">" is only valid as the last token and matches all tokens past that point. A token wildcard, "*" matches any token in the position it was listed. Wildcard tokens should only be used in a wildcard capacity and not part of a literal token.
 
-**Character Encoding**: Subject names should be ascii characters for maximum interoperability. Due to language constraints and performance, some clients may support UTF-8 subject names, as may the server. No guarantees of non-ASCII support are provided.
+**字符编码**: 为了实现最大的互操作性，主题名称应该是ascii字符。由于语言和性能的限制，一些客户机可能支持UTF-8主题名，服务器也可能支持。不提供非ascii支持的保证。
 
-**Wildcards**: NATS supports the use of wildcards in subject subscriptions.
+**通配符**: NATS 支持在主题订阅中使用通配符。
 
-- The asterisk character (`*`) matches a single token at any level of the subject.
-- The greater than symbol (`>`), also known as the _full wildcard_, matches one or more tokens at the tail of a subject, and must be the last token. The wildcarded subject `foo.>` will match `foo.bar` or `foo.bar.baz.1`, but not `foo`. 
-- Wildcards must be a separate token (`foo.*.baz` or `foo.>` are syntactically valid; `foo*.bar`, `f*o.b*r` and `foo>` are not)
+- 星号字符 (`*`) 匹配主题中任意一级中的单个标记。
+- 大于号 (`>`), 也称作 _全通配符_, 匹配一个主题后面一个或者多个标记, 并且必须是多个标记。通配符主题 `foo.>` 可以匹配 `foo.bar` 或者 `foo.bar.baz.1`, 但是不匹配 `foo`。 
+- 通配符必须是一个单独的标识 (`foo.*.baz` 或者 `foo.>` 语法有效; `foo*.bar`, `f*o.b*r` 和 `foo>` 是无效的)
 
-For example, the wildcard subscriptions `foo.*.quux` and `foo.>` both match `foo.bar.quux`, but only the latter matches `foo.bar.baz`.  With the full wildcard,
-it is also possible to express interest in every subject that may exist in NATS: `sub > 1`, limited of course by authorization settings.
+举个例子, 通配符 `foo.*.quux` 和 `foo.>` 都可以匹配 `foo.bar.quux`, 但是只有后面一个可以匹配 `foo.bar.baz`。  使用完整的通配符,
+可能西药表达对NATS中每一个主题都感兴趣: `sub > 1`, 当然受限与认证设置。
 
 ## Protocol messages
 
-The following table briefly describes the NATS protocol messages. NATS protocol operation names are case insensitive, thus `SUB foo 1\r\n` and `sub foo 1\r\n` are equivalent.
+下表简要描述了NATS协议消息。NATS协议操作名不区分大小写，因此`SUB foo 1\r\n` 和 `sub foo 1\r\n` 是等价的。
 
-Click the name to see more detailed information, including syntax:
+点击名称查看更详细的信息，包括语法:
 
-| OP Name              | Sent By        |    Description
+| 操作名              | 发送方        |    描述
 | -------------------- |:-------------- |:--------------------------------------------
-| [`INFO`](#info)  | Server         | Sent to client after initial TCP/IP connection
-| [`CONNECT`](#connect)| Client         | Sent to server to specify connection information
-| [`PUB`](#pub)     | Client         | Publish a message to a subject, with optional reply subject
-| [`SUB`](#sub)        | Client         | Subscribe to a subject (or subject wildcard)
-| [`UNSUB`](#unsub)    | Client         | Unsubscribe (or auto-unsubscribe) from subject
-| [`MSG`](#msg)        | Server         | Delivers a message payload to a subscriber
-| [`PING`](#pingpong)  | Both           | PING keep-alive message
-| [`PONG`](#pingpong)  | Both           | PONG keep-alive response
-| [`+OK`](#okerr)      | Server         | Acknowledges well-formed protocol message in `verbose` mode
-| [`-ERR`](#okerr)     | Server         | Indicates a protocol error. May cause client disconnect.
+| [`INFO`](#info)  | Server         | 在初始TCP/IP连接后发送到客户端
+| [`CONNECT`](#connect)| Client         | 发送特殊的连接信息到服务器
+| [`PUB`](#pub)     | Client         | 向主题发布一条消息，其中包含可选的回复主题
+| [`SUB`](#sub)        | Client         | 订阅一个主题(或者是主题匹配符)
+| [`UNSUB`](#unsub)    | Client         | 取消订阅 (或者自动取消订阅) 主题
+| [`MSG`](#msg)        | Server         | 发布一个消息给订阅者
+| [`PING`](#pingpong)  | Both           | PING 包活消息
+| [`PONG`](#pingpong)  | Both           | PONG 包活响应
+| [`+OK`](#okerr)      | Server         | 在“详细”模式下确认格式良好的协议消息
+| [`-ERR`](#okerr)     | Server         | 指示协议错误。可能导致客户端断开连接。
 
-The following sections explain each protocol message.
+下面几节解释每个协议消息。
 
 ## INFO
 
-####  Description
+####  描述
 
-As soon as the server accepts a connection from the client, it will send information about itself and the configuration and security requirements that are necessary for the client to successfully authenticate with the server and exchange messages.
+一旦服务器接受来自客户端的连接，它就会发送关于自身的信息，以及客户端成功通过服务器身份验证和交换消息所需的配置和安全需求。
 
-When using the updated client protocol (see [`CONNECT`](#connect) below), `INFO` messages can be sent anytime by the server.  This means clients with that protocol level need to be able to asynchronously handle `INFO` messages.
+当使用更新的客户端协议时（请参阅下面的[`CONNECT`](#connect)），服务器可以随时发送 `INFO` 消息。这意味着具有该协议级别的客户端需要能够异步处理 `INFO` 消息。
 
-####  Syntax
+
+####  语法
 
 `INFO {["option_name":option_value],...}`
 
-The valid options are as follows:
+有效的选项如下:
 
-- `server_id`: The unique identifier of the NATS server
-- `version`: The version of the NATS server
-- `go`: The version of golang the NATS server was built with
-- `host`: The IP address used to start the NATS server, by default this will be `0.0.0.0` and can be configured with `-client_advertise host:port`
-- `port`: The port number the NATS server is configured to listen on
-- `max_payload`: Maximum payload size, in bytes, that the server will accept from the client.
-- `proto`: An integer indicating the protocol version of the server. The server version 1.2.0 sets this to `1` to indicate that it supports the "Echo" feature.
-- `client_id`: An optional unsigned integer (64 bits) representing the internal client identifier in the server. This can be used to filter client connections in monitoring, correlate with error logs, etc...
-- `auth_required`: If this is set, then the client should try to authenticate upon connect.
-- `tls_required`: If this is set, then the client must perform the TLS/1.2 handshake. Note, this used to be `ssl_required` and has been updated along with the protocol from SSL to TLS.
-- `tls_verify`: If this is set, the client must provide a valid certificate during the TLS handshake.
-- `connect_urls` : An optional list of server urls that a client can connect to.  
+- `server_id`: NATS服务器的唯一标识符
+- `version`: NATS服务器的版本号
+- `go`: 构建NATS服务器的golang版本号
+- `host`: 用于启动NATS服务器的IP地址，默认为 `0.0.0.0`，可以配置为 `-client_advertise host:port`
+- `port`: NATS服务器监听的端口号
+- `max_payload`: 服务器将从客户端接受的最大有效负载大小，单位为字节。
+- `proto`: 表示服务器的协议版本的整数。例如服务器版本1.2.0将其设置为“1”，以表示它支持“Echo”特性。
+- `client_id`: 一个可选的无符号整数(64位)，表示服务器中的内部客户端标识符。这可以用来过滤监控中的客户端连接，记录错误日志用到，等等。
+- `auth_required`: 如果设置了这个参数，那么客户机应该尝试在connect时进行身份验证。
+- `tls_required`: 如果设置了这个，那么客户机必须执行TLS/1.2握手。注意，这曾经是`ssl_required`，并随着协议从SSL更新到TLS。
+- `tls_verify`: 如果设置了这个，客户端必须在TLS握手期间提供一个有效的证书。
+- `connect_urls` : 客户端可以连接到的可选服务器url列表。
 
 ##### connect_urls
 
-The `connect_urls` field is a list of urls the server may send when a client first connects, and when there are changes to server cluster topology.  This field is considered optional, and may be omitted based on server configuration and client protocol level.
+`connect_urls` 字段是一个url列表，当客户端第一次连接时，当服务器集群拓扑结构发生更改时，服务器可能发送这些url。该字段被认为是可选的，
+可以根据服务器配置和客户端协议级别省略。
 
-When a NATS server cluster expands, an `INFO` message is sent to the client with an updated `connect_urls` list.  This cloud-friendly feature asynchronously notifies a client of known servers, allowing it to connect to servers not originally configured.
+当NATS服务器集群扩展时，会向客户机发送一条`INFO`消息，其中包含一个更新后的`connect_urls`列表。这个云友好特性异步地通知服务器已知的客户端，允许它连接到未初始配置的服务器。
 
-The `connect_urls` will contain a list of strings with an IP and port, looking like this: ```"connect_urls":["10.0.0.184:4333","192.168.129.1:4333","192.168.192.1:4333"]```
+`connect_urls`将包含一个带有IP和端口的字符串列表，如下所示: ```"connect_urls":["10.0.0.184:4333","192.168.129.1:4333","192.168.192.1:4333"]```
 
-####  Example
+####  举例
 
-Below you can see a sample connection string from a telnet connection to the `demo.nats.io` site.
+下面您可以看到telnet连接到 `demo.nats.io` 网站的例子：
 
 ```sh
 % telnet demo.nats.io 4222
@@ -104,167 +112,170 @@ INFO {"server_id":"Zk0GQ3JBSrg3oyxCRRlE09","version":"1.2.0","proto":1,"go":"go1
 
 ## CONNECT
 
-####  Description
+####  描述
 
-The `CONNECT` message is the client version of the [`INFO`](#info) message. Once the client has established a TCP/IP socket connection with the NATS server, and an [`INFO`](#info) message has been received from the server, the client may send a `CONNECT` message to the NATS server to provide more information about the current connection as well as security information.
+`CONNECT`消息是客户端发送给服务器的[`INFO`](#INFO)消息。一旦客户端与NATS服务器建立了TCP/IP套接字连接，并且从服务器接收到一条[`INFO`](#INFO)消息，客户端就可以向NATS服务器发送一条`CONNECT`消息，以提供关于当前连接和安全信息的更多信息。
 
-####  Syntax
+####  语法
 
 `CONNECT {["option_name":option_value],...}`
 
-The valid options are as follows:
+有效的可选项如下：
 
-* `verbose`: Turns on [`+OK`](#okerr) protocol acknowledgements.
-* `pedantic`: Turns on additional strict format checking, e.g. for properly formed subjects
-* `tls_required`: Indicates whether the client requires an SSL connection.
-* `auth_token`: Client authorization token (if `auth_required` is set)
-* `user`: Connection username (if `auth_required` is set)
-* `pass`: Connection password (if `auth_required` is set)
-* `name`: Optional client name
-* `lang`: The implementation language of the client.
-* `version`: The version of the client.
-* `protocol`: *optional int*. Sending `0` (or absent) indicates client supports original protocol. Sending `1` indicates that the client supports dynamic reconfiguration of cluster topology changes by asynchronously receiving [`INFO`](#info) messages with known servers it can reconnect to.
-* `echo`: Optional boolean. If set to `true`, the server (version 1.2.0+) will not send originating messages from this connection to its own subscriptions. Clients should set this to `true` only for server supporting this feature, which is when `proto` in the `INFO` protocol is set to at least `1`.
+* `verbose`: 打开 [`+OK`](#okerr) 协议确认。
+* `pedantic`: 开启额外的严格格式检查，例如检查主题格式是否正确
+* `tls_required`: 指示客户端是否需要SSL连接。
+* `auth_token`: 客户端授权令牌(如果设置了`auth_required`)
+* `user`: 连接用户名(如果设置了`auth_required`)
+* `pass`: 连接密码(如果设置了`auth_required`)
+* `name`: 可选的客户端名称
+* `lang`: 客户机的实现语言。
+* `version`: 客户端的版本。
+* `protocol`: *可以选的整数*。发送`0`(或不发送)表示客户端支持原始协议。发送`1`表示客户端异步地接收[`INFO`](#INFO)消息来支持集群拓扑更改的动态重新配置，
+这些消息包含了客户端可以重新连接到的服务器。
+* `echo`: 可选布尔值。如果设置为“true”，服务器(版本1.2.0+)将不会从该连接发送原始消息到订阅者。
+，当服务器支持此功能（即`info`协议中的`proto`设置大于`1`），客户端就应设置为“真”。
 
-####  Example
+####  举例
 
-Here is an example from the default string of the Go client:
+下面是一个来自Go客户端的默认字符串的例子:
 
 ```
 [CONNECT {"verbose":false,"pedantic":false,"tls_required":false,"name":"","lang":"go","version":"1.2.2","protocol":1}]\r\n
 ```
 
-Most clients set `verbose` to `false` by default. This means that the server should not confirm each message it receives on this connection with a [`+OK`](#okerr) back to the client.
+大多数客户默认将`verbose`设置为`false`。这意味着服务器不用返回客户端[`+OK`](#okerr)来确认它收到了消息。
 
 ## PUB
 
-####  Description
+####  描述
 
-The `PUB` message publishes the message payload to the given subject name, optionally supplying a reply subject. If a reply subject is supplied, it will be delivered to eligible subscribers along with the supplied payload. Note that the payload itself is optional. To omit the payload, set the payload size to 0, but the second CRLF is still required.
+`pub`指令会将消息发布到给定的主题名称，可选提供应答主题。如果提供了应答主题，它将连同提供的消息体一起分发给符合条件的订阅者。
+注意，payload本身是可选的。要省略payload，请将payload大小设置为0，但是仍然需要CRLF（\r\n）。
 
-####  Syntax
+####  语法
 
 `PUB <subject> [reply-to] <#bytes>\r\n[payload]\r\n`
 
 where:
 
-- `subject`: The destination subject to publish to
-- `reply-to`: The optional reply inbox subject that subscribers can use to send a response back to the publisher/requestor
-- `#bytes`: The payload size in bytes
-- `payload`: The message payload data
+- `subject`: 发布到哪个主题
+- `reply-to`: 可选的回复收件箱主题，订阅者可以用来发送一个响应给发布者/请求者
+- `#bytes`: 以字节为单位的有效负载大小
+- `payload`: 消息体
 
-####  Example
+####  举例
 
-To publish the ASCII string message payload "Hello NATS!" to subject FOO:
+要将ASCII字符串消息体“Hello NATS!”发布到主题FOO:
 
 `PUB FOO 11\r\nHello NATS!\r\n`
 
-To publish a request message "Knock Knock" to subject FRONT.DOOR with reply subject INBOX.22:
+将请求消息“Knock - Knock”发布到主题FRONT.DOOR。同时设置回复主题为INBOX.22:
 
 `PUB FRONT.DOOR INBOX.22 11\r\nKnock Knock\r\n`
 
-To publish an empty message to subject NOTIFY:
+向主题NOTIFY发布空消息:
 
 `PUB NOTIFY 0\r\n\r\n`
 
 ## SUB
 
-####  Description
+####  描述
 
-`SUB` initiates a subscription to a subject, optionally joining a distributed queue group.
+`SUB` 启动对主题的订阅，可以选择加入分布式队列组。
 
-####  Syntax
+####  语法
 
 `SUB <subject> [queue group] <sid>\r\n`
 
 where:
 
-- `subject`: The subject name to subscribe to
-- `queue group`: If specified, the subscriber will join this queue group
-- `sid`: A unique alphanumeric subscription ID, generated by the client
+- `subject`: 订阅的主题名称
+- `queue group`: 如果指定，订阅者将加入此队列组
+- `sid`: 客户端生成的由字母数字组成的唯一订阅ID
 
-####  Example
+####  举例
 
-To subscribe to the subject `FOO` with the connection-unique subscription identifier (sid) `1`:
+订阅主题 `FOO` ，指定唯一的连接订阅标识 (sid) `1`:
 
 `SUB FOO 1\r\n`
 
-To subscribe the current connection to the subject `BAR` as part of distribution queue group `G1` with sid `44`:
+使用分发队列组`G1`的一部分sid`44`订阅主题`BAR`:
 
 `SUB BAR G1 44\r\n`
 
 ## UNSUB
 
-####  Description
+####  描述
 
-`UNSUB` unsubcribes the connection from the  specified subject, or auto-unsubscribes after the specified number of messages has been received.
-
-####  Syntax
+`UNPUB`取消指定主题的连接，或在收到指定数量的消息后自动取消订阅。
+####  语法
 
 `UNSUB <sid> [max_msgs]`
 
 where:
 
-* `sid`: The unique alphanumeric subscription ID of the subject to unsubscribe from
-* `max_msgs`: An optional number of messages to wait for before automatically unsubscribing
+* `sid`: 要取消订阅的主题的唯一字母数字订阅ID
+* `max_msgs`: 等待的最大消息数量，之后就自动取消订阅
 
-####  Example
+####  例子
 
-The following examples concern subject `FOO` which has been assigned sid `1`. To unsubscribe from `FOO`:
+下面的示例涉及主题`FOO`，它被分配给sid`1`。取消订阅`FOO`:
 
 `UNSUB 1\r\n`
 
-To auto-unsubscribe from `FOO` after 5 messages have been received:
+从 `FOO` 主题收到 5 条消息后自动取消订阅:
 
 `UNSUB 1 5\r\n`
 
 ## MSG
 
-####  Description
+####  描述
 
-The `MSG` protocol message is used to deliver an application message to the client.
+`MSG` 协议消息用于向客户端传递应用程序消息。
 
-####  Syntax
+####  语法
 
 `MSG <subject> <sid> [reply-to] <#bytes>\r\n[payload]\r\n`
 
 where:
 
-* `subject`: Subject name this message was received on
-* `sid`: The unique alphanumeric subscription ID of the subject
-* `reply-to`: The inbox subject on which the publisher is listening for responses
-* `#bytes`: Size of the payload in bytes
-* `payload`: The message payload data
+* `subject`: 收取消息的主题名
+* `sid`: 主题的唯一字母数字组成的订阅ID
+* `reply-to`: 发布者等待回复的收件箱主题
+* `#bytes`: 消息体的大小(以字节为单位)
+* `payload`: 消息体
 
-####  Example
+####  例子
 
-The following message delivers an application message from subject `FOO.BAR`:
+下面是发布消息到主题`FOO.BAR`:
 
 `MSG FOO.BAR 9 11\r\nHello World\r\n`
 
-To deliver the same message along with a reply inbox:
+下面是带回复主题的，内容和上面消息一样:
 
 `MSG FOO.BAR 9 INBOX.34 11\r\nHello World\r\n`
 
 ## PING/PONG
 
-####  Description
+####  描述
 
-`PING` and `PONG` implement a simple keep-alive mechanism between client and server. Once a client establishes a connection to the NATS server, the server will continuously send `PING` messages to the client at a configurable interval. If the client fails to respond with a `PONG` message within the configured response interval, the server will terminate its connection. If your connection stays idle for too long, it is cut off.
+`PING`和`PONG`在客户端和服务器之间实现了一个简单的保持连接机制。一旦客户端建立了到 NATS 服务器的连接，服务器将以配置的时间
+不断地向客户端发送`PING`消息。如果客户端未能在配置的响应间隔内响应`PONG`消息，服务器将终止连接。如果您的连接闲置太久，就会断开连接。
 
-If the server sends a ping request, you can reply with a pong message to notify the server that you are still interested. You can also ping the server and will receive a pong reply. The ping/pong interval is configurable.
+如果服务器发送ping请求，您可以使用pong消息进行回复，通知服务器您仍然感兴趣。您还可以ping服务器，并将收到一个pong回复。乒乓间隔是可配置的。
 
-The server uses normal traffic as a ping/pong proxy, so a client that has messages flowing may not receive a ping from the server.
+服务器使用普通流量作为ping/pong代理，因此具有消息流的客户端可能不会从服务器接收到ping。
 
-####  Syntax
+####  语法
 
 `PING\r\n`
 
 `PONG\r\n`
 
-####  Example
+####  举例
 
-The following example shows the demo server pinging the client and finally shutting it down.
+下面的示例显示了演示服务器ping客户端并最终关闭它。
 
 ```
 telnet demo.nats.io 4222
@@ -281,37 +292,47 @@ Connection closed by foreign host.
 
 ## +OK/ERR
 
-####  Description
+####  描述
 
-When the `verbose` connection option is set to `true` (the default value), the server acknowledges each well-formed protocol message from the client with a `+OK` message. Most NATS clients set the `verbose` option to `false` using the [`CONNECT`](#connect) message
+When the `verbose` connection option is set to `true` (the default value), the server acknowledges each well-formed protocol 
+message from the client with a `+OK` message. Most NATS clients set the `verbose` option to `false` using the [`CONNECT`](#connect) message
 
-The `-ERR` message is used by the server indicate a protocol, authorization, or other runtime connection error to the client. Most of these errors result in the server closing the connection.
+The `-ERR` message is used by the server indicate a protocol, authorization, or other runtime connection error to the client. 
+Most of these errors result in the server closing the connection.
 
 Handling of these errors usually has to be done asynchronously.
 
-####  Syntax
+当`verbose`连接选项设置为`true`(默认值)时，服务器将用`+OK`消息确认来自客户端的每个格式良好的协议消息。大多数NATS客户端使用[`CONNECT`](#CONNECT)
+消息将`verbose`选项设置为`false`
+
+服务器使用的`-ERR`消息指示到客户端的协议、授权或其他运行时连接错误。大多数错误导致服务器关闭连接。
+
+处理这些错误通常必须异步进行。
+
+####  语法
 
 `+OK`
 
 `-ERR <error message>`
 
-Some protocol errors result in the server closing the connection.  Upon receiving these errors, the connection is no longer valid and the client should clean up relevant resources.  These errors include:
+一些协议错误导致服务器关闭连接。接收到这些错误后，连接将不再有效，客户端应该清理相关资源。这些错误包括:
 
-- `-ERR 'Unknown Protocol Operation'`: Unknown protocol error
-- `-ERR 'Attempted To Connect To Route Port'`: Client attempted to connect to a route port instead of the client port
-- `-ERR 'Authorization Violation'`: Client failed to authenticate to the server with credentials specified in the [`CONNECT`](#connect) message
-- `-ERR 'Authorization Timeout'`: Client took too long to authenticate to the server after establishing a connection (default 1 second)
-- `-ERR 'Invalid Client Protocol'`: Client specified an invalid protocol version in the [`CONNECT`](#connect) message
-- `-ERR 'Maximum Control Line Exceeded'`: Message destination subject and reply subject length exceeded the maximum control line value specified by the `max_control_line` server option.  The default is 1024 bytes.
-- `-ERR 'Parser Error'`: Cannot parse the protocol message sent by the client
-- `-ERR 'Secure Connection - TLS Required'`:  The server requires TLS and the client does not have TLS enabled.
-- `-ERR 'Stale Connection'`: The server hasn't received a message from the client, including a `PONG` in too long.
-- `-ERR 'Maximum Connections Exceeded`': This error is sent by the server when creating a new connection and the server has exceeded the maximum number of connections specified by the `max_connections` server option.  The default is 64k.
-- `-ERR 'Slow Consumer'`: The server pending data size for the connection has reached the maximum size (default 10MB).
-- `-ERR 'Maximum Payload Violation'`: Client attempted to publish a message with a payload size that exceeds the `max_payload` size configured on the server. This value is supplied to the client upon connection in the initial [`INFO`](#info) message. The client is expected to do proper accounting of byte size to be sent to the server in order to handle this error synchronously.
+- `-ERR 'Unknown Protocol Operation'`: 未知协议错误
+- `-ERR 'Attempted To Connect To Route Port'`: 客户端试图连接到路由端口而不是客户端端口
+- `-ERR 'Authorization Violation'`: 客户端无法使用[`CONNECT`](#CONNECT)消息中指定的凭据对服务器进行身份验证
+- `-ERR 'Authorization Timeout'`: 客户端在建立连接后花费太长时间对服务器进行身份验证(默认为1秒)
+- `-ERR 'Invalid Client Protocol'`: 客户端在[`CONNECT`](#CONNECT)消息中指定了一个无效的协议版本
+- `-ERR 'Maximum Control Line Exceeded'`: 消息目标主题和回复主题长度超过了服务器配置的`max_control_line`。默认值是1024字节。
+- `-ERR 'Parser Error'`: 无法解析客户端发送的协议消息
+- `-ERR 'Secure Connection - TLS Required'`:  服务器需要TLS，而客户机没有启用TLS。
+- `-ERR 'Stale Connection'`: 服务器太长时间没有收到来自客户端的消息，包括`pong`。
+- `-ERR 'Maximum Connections Exceeded`': 此错误由服务器在创建新连接时发送，服务器连接数已超过了服务器配置的最大连接数`max_connections`。默认值是64k。
+- `-ERR 'Slow Consumer'`: 连接的服务器挂起的数据大小已达到最大值(默认为10MB)。
+- `-ERR 'Maximum Payload Violation'`: 客户端试图发布一个消息体大小超过服务器上配置的`max_payload`大小的消息。
+该值在连接初始[`INFO`](#INFO)消息时提供给客户端。客户端需要正确计算要发送到服务器的字节大小，以便同步处理此错误。
 
-Protocol error messages where the connection remains open are listed below.  The client should not close the connection in these cases.
+下面列出了仍然打开连接的协议错误消息。在这些情况下，客户端不应该关闭连接。
 
-- `-ERR 'Invalid Subject'`: Client sent a malformed subject (e.g. `sub foo. 90`)
-- `-ERR 'Permissions Violation for Subscription to <subject>'`: The user specified in the [`CONNECT`](#connect) message does not have permission to subscribe to the subject.
-- `-ERR 'Permissions Violation for Publish to <subject>'`: The user specified in the [`CONNECT`](#connect) message does not have permissions to publish to the subject.
+- `-ERR 'Invalid Subject'`: 客户端发送了一个格式不正确的主题 (e.g. `sub foo. 90`)
+- `-ERR 'Permissions Violation for Subscription to <subject>'`: [`CONNECT`](#connect) 消息中指定的用户没有订阅该主题的权限。
+- `-ERR 'Permissions Violation for Publish to <subject>'`: [`CONNECT`](#connect) 消息中指定的用户没有发布到该主题的权限。
