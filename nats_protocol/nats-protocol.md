@@ -337,4 +337,4 @@ Handling of these errors usually has to be done asynchronously.
 - `-ERR 'Permissions Violation for Subscription to <subject>'`: [`CONNECT`](#connect) 消息中指定的用户没有订阅该主题的权限。
 - `-ERR 'Permissions Violation for Publish to <subject>'`: [`CONNECT`](#connect) 消息中指定的用户没有发布到该主题的权限。
 
-[原文](https://github.com/nats-io/docs/blob/master/nats_protocol/nats-protocol.md)
+本人翻译水平有限，读者朋友实在看不懂了，请参考[原文](https://github.com/nats-io/docs/blob/master/nats_protocol/nats-protocol.md)

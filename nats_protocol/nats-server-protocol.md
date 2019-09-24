@@ -169,4 +169,4 @@ where:
 
 
 
-[原文](https://github.com/nats-io/docs/blob/master/nats_protocol/nats-server-protocol.md)
+本人翻译水平有限，读者朋友实在看不懂了，请参考[原文](https://github.com/nats-io/docs/blob/master/nats_protocol/nats-server-protocol.md)
