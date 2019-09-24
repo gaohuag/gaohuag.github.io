@@ -1,162 +1,161 @@
 ## NATS Cluster Protocol
+NATS服务器集群协议描述在[cluster](/nats_server/clustering.md)内的NATS服务器之间传递的协议，用于共享关于新服务器的帐户、订阅、转发消息和共享集群拓扑。它是一个简单的基于文本的协议。
+服务器之间通过常规TCP/IP或TLS套接字进行通信，使用一组由换行终止的协议操作。
 
-The NATS server clustering protocol describes the protocols passed between NATS servers within a [cluster](/nats_server/clustering.md) to share accounts, subscriptions, forward messages, and share cluster topology regarding new servers.  It is a simple text-based protocol. Servers communicate with each other through a regular TCP/IP or TLS socket using a small set of protocol operations that are terminated by newline.
+NATS服务器实现了一个快速高效的[零分配字节解析器](https://youtu.be/ylRKac5kSOk?t=10m46s)。
 
-The NATS server implements a [zero allocation byte parser](https://youtu.be/ylRKac5kSOk?t=10m46s) that is fast and efficient.
+NATS cluster 协议与NATS客户端协议非常相似。 在cluster的上下文中，可以将服务器看作代表其连接的客户端操作的代理，订阅、取消订阅、发送和接收消息。
 
-The NATS cluster protocol is very similar to that of the NATS client protocol.  In the context of a cluster, it can be helpful to visualize a server being a proxy operating on behalf of its connected clients, subscribing, unsubscribing, sending and receiving messages.
+## NATS Cluster 协议约定
 
-## NATS Cluster protocol conventions
+**主题名称与通配符**: NATS集群协议在主题名称和通配符方面具有与客户端相同的特性和限制。
+客户端绑定到一个帐户，但是集群协议处理所有帐户。
 
-**Subject names and wildcards**: The NATS cluster protocol has the same features and restrictions as the client with respect to subject names and wildcards. Clients are bound to a single account, however the cluster protocol handles all accounts.
+**字段分隔符**: NATS协议消息的字段由空格字符'` `' (空格符)  or `\t` (tab)分隔。多个空白字符将被视为单个字段分隔符。
 
-**Field Delimiters**: The fields of NATS protocol messages are delimited by whitespace characters '` `' (space)  or `\t` (tab).
-Multiple whitespace characters will be treated as a single field delimiter.
+**新行**: 与其他基于文本的协议一样，NATS使用`CR`后跟`LF`(`CR+LF`, `\r\n`, `0x0D0A`)来终止协议消息。
+这个换行符还用于在`RMSG`协议消息中标记实际消息payload的开始。
 
-**Newlines**: Like other text-based protocols, NATS uses `CR` followed by `LF` (`CR+LF`, `\r\n`, `0x0D0A`) to terminate protocol messages.  This newline sequence is also used to mark the beginning of the actual message payload in a `RMSG` protocol message.
+## NATS Cluster 协议消息
 
-## NATS Cluster protocol messages
-
-The following table briefly describes the NATS cluster protocol messages.
-As in the client protocol, the NATS protocol operation names are case insensitive, thus `SUB foo 1\r\n` and `sub foo 1\r\n` are equivalent.
-
-Click the name to see more detailed information, including syntax:
+下表简要描述了NATS cluster 协议消息。
+与在客户端协议中一样，NATS协议操作名不区分大小写，因此 `SUB foo 1\r\n` 与 `sub foo 1\r\n`是等价的。
+点击名称查看更详细的信息，包括语法:
 
 
 | OP Name              | Sent By          |    Description
 | -------------------- |:-----------------|:--------------------------------------------
-| [`INFO`](#info)      | All Servers      | Sent after initial TCP/IP connection and to update cluster knowledge
-| [`CONNECT`](#connect)| All Servers      | Sent to establish a route
-| [`RS+`](#sub)        | All Servers      | Subscribes to a subject for a given account on behalf of interested clients.
-| [`RS-`](#unsub)      | All Servers      | Unsubscribe (or auto-unsubscribe) from subject for a given account.
-| [`RMSG`](#rmsg)      | Origin Server    | Delivers a message for a given subject and account to another server.
-| [`PING`](#pingpong)  | All Servers      | PING keep-alive message
-| [`PONG`](#pingpong)  | All Servers      | PONG keep-alive response
-| [`-ERR`](#-err)       | All Servers      | Indicates a protocol error. May cause the remote server to disconnect.
+| [`INFO`](#info)      | All Servers      | 初始TCP/IP连接后发送并更新集群知识
+| [`CONNECT`](#connect)| All Servers      | 建立连接
+| [`RS+`](#sub)        | All Servers      | 代表感兴趣的客户端为给定帐户订阅主题。
+| [`RS-`](#unsub)      | All Servers      | 取消对给定帐户的主题的订阅(或自动取消订阅)。
+| [`RMSG`](#rmsg)      | Origin Server    | 将给定主题和帐户的消息传递给另一台服务器。
+| [`PING`](#pingpong)  | All Servers      | PING 包活消息
+| [`PONG`](#pingpong)  | All Servers      | PONG 包活回复消息
+| [`-ERR`](#-err)      | All Servers      | 指示协议错误。可能导致远程服务器断开连接。
 
 
-The following sections explain each protocol message.
+下面几节解释每个协议消息。
 
 ## INFO
 
-#### Description
+#### 描述
 
-As soon as the server accepts a connection from another server, it will send information about itself and the configuration and security requirements that are necessary for the other server to successfully authenticate with the server and exchange messages.
+一旦服务器接受来自另一台服务器的连接，它就会发送关于自己的信息，以及其他服务器成功通过服务器身份验证和交换消息所需的配置和安全需求。
+连接服务器还发送一条`INFO`消息。接受服务器将添加一个`ip`字段，其中包含连接服务器的地址和端口，并将新服务器的`INFO`消息转发到它路由到的所有服务器。
+集群中的任何服务器如果接收到带有`ip`字段的`INFO`消息，都将尝试连接到该地址的服务器，除非已经连接。这种代表连接服务器的
+`INFO`消息传播提供了加入集群的新服务器的自动发现。
 
-The connecting server also sends an `INFO` message.  The accepting server will add an `ip` field containing the address and port of the connecting server, and forward the new server's `INFO` message to all servers it is routed to.
-
-Any servers in a cluster receiving an `INFO` message with an `ip` field will attempt to connect to the server at that address, unless already connected.  This propagation of `INFO` messages on behalf of a connecting server provides automatic discovery of new servers joining a cluster.
-
-#### Syntax
+#### 语法
 
 `INFO {["option_name":option_value],...}`
 
-The valid options are as follows:
+有效的选项如下:
 
-* `server_id`: The unique identifier of the NATS server
-* `version`: The version of the NATS server
-* `go`: The version of golang the NATS server was built with
-* `host`: The host specified in the cluster parameter/options
-* `port`: The port number specified in the cluster parameter/options
-* `auth_required`: If this is set, then the server should try to authenticate upon connect.
-* `tls_required`: If this is set, then the server must authenticate using TLS.
-* `max_payload`: Maximum payload size that the server will accept.
-* `connect_urls` : A list of server urls that a client can connect to.
-* `ip`:  Optional route connection address of a server, `nats-route://<hostname>:<port>`
+* `server_id`: NATS 服务器的唯一标识符
+* `version`: NATS服务器的版本
+* `go`: 构建 NATS 服务器的 golang 版本
+* `host`: 群集参数/选项中指定的主机
+* `port`: 端口号
+* `auth_required`: 如果设置了这个，那么服务器应该尝试在连接时进行身份验证。
+* `tls_required`: 如果设置了这个参数，那么服务器必须使用TLS进行身份验证。
+* `max_payload`: 服务器将接受的最大 payload 大小。
+* `connect_urls` : 客户端可以连接到的服务器url列表。
+* `ip`:  服务器的可选路由连接地址， `nats-route://<hostname>:<port>`
 
-#### Example
+#### 举例
 
-Below is an example of an `INFO` string received by a NATS server, with the `ip` field.
+下面是一个由NATS服务器接收的带有`ip`字段的`INFO`字符串示例。
 
 `INFO {"server_id":"KP19vTlB417XElnv8kKaC5","version":"2.0.0","go":"","host":"localhost","port":5222,"auth_required":false,"tls_required":false,"tls_verify":false,"max_payload":1048576,"ip":"nats-route://127.0.0.1:5222/","connect_urls":["localhost:4222"]}`
 
 ## CONNECT
 
-#### Description
+#### 描述
 
-The `CONNECT` message is analogous to the [`INFO`](#info) message. Once the NATS server has established a TCP/IP socket connection with another server, and an [`INFO`](#info) message has been received, the server will send a `CONNECT` message to provide more information about the current connection as well as security information.
+`CONNECT`消息类似于[`INFO`](#INFO)消息。一旦 NATS 服务器与另一台服务器建立了TCP/IP连接，并且接收到一条[`INFO`](#INFO)消息，
+服务器将发送一条`CONNECT`消息，以提供关于当前连接和安全信息的更多信息。
 
-#### Syntax
+#### 语法
 
 `CONNECT {["option_name":option_value],...}`
 
-The valid options are as follows:
+下面是有效的选项:
 
-* `tls_required`: Indicates whether the server requires an SSL connection.
-* `auth_token`:  Authorization token
-* `user`: Connection username (if `auth_required` is set)
-* `pass`: Connection password (if `auth_required` is set)
-* `name`: Generated Server Name
-* `lang`: The implementation language of the server (go).
-* `version`: The version of the server.
+* `tls_required`: 指示服务器是否需要SSL连接。
+* `auth_token`:  授权令牌
+* `user`: 连接用户名(如果设置了`auth_required`)
+* `pass`: 连接密码(如果设置了`auth_required`)
+* `name`: 生成的服务器名
+* `lang`: 服务器的实现语言(go).
+* `version`: 服务器的版本。
 
-#### Example
+#### 例子
 
-Here is an example from the default string from a server.
+下面是来自服务器的默认字符串的一个示例。
 
 `CONNECT {"tls_required":false,"name":"wt0vffeQyoDGMVBC2aKX0b"}\r\n`
 
 ## <a name="SUB"></a>RS+
 
-#### Description
+#### 描述
+`RS+`在给定帐户上启动对主题的订阅，可以选择使用分布式队列组名称和权重因子。
+注意，队列订阅将使用RS+来增加和减少队列权重，除非权重因子为0。
+     
+#### 语法
 
-`RS+` initiates a subscription to a subject on on a given account, optionally with a distributed queue group name and weighting factor.
-Note that queue subscriptions will use RS+ for increases and descreases to queue weight except when the weighting factor is 0.
+**订阅**: `RS+ <account> <subject>\r\n`
 
-#### Syntax
-
-**Subscription**: `RS+ <account> <subject>\r\n`
-
-**Queue Subscription**: `RS+ <account> <subject> <queue> <weight>\r\n`
+**队列订阅**: `RS+ <account> <subject> <queue> <weight>\r\n`
 
 where:
 
-* `account`: The account associated with the subject interest
-* `subject`: The subject
-* `queue`: Optional queue group name
-* `weight`: Optional queue group weight representing how much interest/subscribers
+* `account`: 主题兴趣关联的账户
+* `subject`: 主题
+* `queue`: 队列名称
+* `weight`: 可选的队列组权重，表示有多少 兴趣/订阅者
 
 ## <a name="UNSUB"></a>RS-
 
-#### Description
+#### 描述
 
-`RS-` unsubcribes from the specified subject on the given account. It is sent by a server when it no longer has interest in a given subject.
+`RS-` 给定账号上取消订阅指定主题。当服务器不再对给定的主题感兴趣时，就会发送它。
 
-#### Syntax
+#### 语法
 
 **Subscription**: `RS- <account> <subject>\r\n`
 
 where:
 
-* `account`: The account associated with the subject interest
-* `subject`: The subject
+* `account`: 主题的账号
+* `subject`: 主题
 
 ## RMSG
 
 #### Description
 
-The `RMSG` protocol message delivers a message to another server.
+ `RMSG` 协议消息是发送消息给另外一个服务端
 
-#### Syntax
+#### 语法
 
 `RMSG <account> <subject> [reply-to] <#bytes>\r\n[payload]\r\n`
 
 where:
 
-* `account`: The account associated with the subject interest
-* `subject`: Subject name this message was received on
-* `reply-to`: The optional reply subject
-* `#bytes`: Size of the payload in bytes
-* `payload`: The message payload data
+* `account`: 主题的账号
+* `subject`: 主题
+* `reply-to`: 可选的回复主题
+* `#bytes`: payload 的大小，单位是 bytes
+* `payload`:  payload 数据
 
 ## PING/PONG
 
 #### Description
 
-`PING` and `PONG` implement a simple keep-alive mechanism between servers. Once two servers establish a connection with each other, the NATS server will continuously send `PING` messages to other servers at a configurable interval. If another server fails to respond with a `PONG` message within the configured response interval, the server will terminate its connection. If your connection stays idle for too long, it is cut off.
+`PING`和`PONG`在服务器之间实现了一个简单的包活机制。一旦两台服务器彼此建立连接，NATS服务器将以配置的时间间隔不断地向其他服务器发送`PING`消息。
+如果其他服务器未能在配置的响应间隔内响应`PONG`消息，则服务器将终止其连接。如果您的连接闲置太久，就会被切断。
 
-If the another server sends a ping request, a server will reply with a pong message to notify the other server that it is still present.
-
+如果另一个服务器发送ping请求，服务器将使用pong消息进行响应，通知另一个服务器它仍然存在。
 #### Syntax
 
 `PING\r\n`
@@ -164,6 +163,10 @@ If the another server sends a ping request, a server will reply with a pong mess
 
 ## -ERR
 
-#### Description
+#### 描述
 
-The `-ERR` message is used by the server to indicate a protocol, authorization, or other runtime connection error to another server. Most of these errors result in the remote server closing the connection.
+服务器使用`-ERR`消息指示到另一台服务器的协议、授权或其他运行时连接错误。大多数错误导致远程服务器关闭连接。
+
+
+
+[原文](https://github.com/nats-io/docs/blob/master/nats_protocol/nats-server-protocol.md)

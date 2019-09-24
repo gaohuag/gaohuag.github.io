@@ -336,3 +336,5 @@ Handling of these errors usually has to be done asynchronously.
 - `-ERR 'Invalid Subject'`: 客户端发送了一个格式不正确的主题 (e.g. `sub foo. 90`)
 - `-ERR 'Permissions Violation for Subscription to <subject>'`: [`CONNECT`](#connect) 消息中指定的用户没有订阅该主题的权限。
 - `-ERR 'Permissions Violation for Publish to <subject>'`: [`CONNECT`](#connect) 消息中指定的用户没有发布到该主题的权限。
+
+[原文](https://github.com/nats-io/docs/blob/master/nats_protocol/nats-protocol.md)
