@@ -44,4 +44,4 @@ NATS 可以运行在任何地方：大的服务器、云主机、边缘网关、
   * 遥测、传感器数据、命令和控制
 * 扩展或者替换遗留消息系统
 
-本人翻译水平有限，读者朋友实在看不懂了，请参考[原文](https://github.com/nats-io/docs/blob/master/READMEl.md)
+本人翻译水平有限，读者朋友实在看不懂了，请参考[原文](https://github.com/nats-io/docs/blob/master/README.md)
