@@ -1,22 +1,24 @@
-## Protocol Demo
+## 协议演示
 
-The virtues of the NATS protocol manifest quickly when you experience how easy it is to use NATS. Because the NATS protocol is text-based, you can use NATS across virtually any platform or language. In the following demo we use [Telnet](https://en.wikipedia.org/wiki/Telnet).
+当您体验到使用NATS是多么容易时，NATS协议的优点很快就会体现出来。因为NATS协议是基于文本的，所以您可以跨几乎任何平台或语言使用NATS。
+在下面的演示中，我们使用[Telnet](https://en.wikipedia.org/wiki/Telnet)。
 
-On the wire you can publish and subscribe using a simple [set of protocol commands](nats-protocol.md).
+在网络上，您可以使用一个简单的[协议命令集](nats-protocol.md)发布和订阅。
 
-## Instructions
 
-**1. Open a terminal session.**
+## 指令
 
-You'll use this terminal as the subscriber.
+**1. 打开一个终端会话**
 
-**2. Connect to NATS.**
+您将使用这个终端作为订阅者。
+
+**2. 连接到NATS。**
 
 ```
 telnet demo.nats.io 4222
 ```
 
-Expected result:
+期望的结果:
 
 ```
 $ telnet demo.nats.io 4222
@@ -26,32 +28,32 @@ Escape character is '^]'.
 INFO {"server_id":"NCXMJZYQEWUDJFLYLSTTE745I2WUNCVG3LJJ3NRKSFJXEG6RGK7753DJ","version":"2.0.0","proto":1,"go":"go1.11.10","host":"0.0.0.0","port":4222,"max_payload":1048576,"client_id":5089}
 ```
 
-**3. Run the subscriber.**
+**3. 订阅主题**
 
-Subscribe to the wildcard subject `foo.*` with subject ID of `90`.
+订阅通配符主题 `foo.*`，使用主题ID `90`.
 
 ```
 sub foo.* 90
 ```
 
-Subscriber result: `+OK` indicating successful interest registration.
+服务器端返回: `+OK` 表示已成功登记。
 
 ```
 sub foo.* 90
 +OK
 ```
 
-**4. Open a second terminal window.**
+**4. 再打开一个终端**
 
-You'll use this terminal for the publisher.
+您将为发布者使用这个终端。
 
-**5. Connect to NATS.**
+**5. 连接 NATS.**
 
 ```
 telnet demo.nats.io 4222
 ```
 
-Expected result:
+期望结果:
 
 ```
 $ telnet demo.nats.io 4222
@@ -60,16 +62,16 @@ Connected to demo.nats.io.
 Escape character is '^]'.
 INFO {"server_id":"NCXMJZYQEWUDJFLYLSTTE745I2WUNCVG3LJJ3NRKSFJXEG6RGK7753DJ","version":"2.0.0","proto":1,"go":"go1.11.10","host":"0.0.0.0","port":4222,"max_payload":1048576,"client_id":5089}
 ```
-**6. Publish a message.**
+**6. 发布一条消息**
 
-The message includes the command (`pub`), subject (`foo.bar`), and length of the payload (`5`). Press enter and provide the payload (`hello`), then press enter again.
+消息包括命令(`pub`)、主题(`foo.bar`)和payload的长度(`5`)。按回车并提供payload(`hello`)，然后再次按回车。
 
 ```
 pub foo.bar 5
 hello
 ```
 
-Publisher result: `+OK` indicating message publication.
+发布结果: `+OK` 指示消息发布成功。
 
 ```
 pub foo.bar 5
@@ -78,6 +80,7 @@ hello
 ```
 
 Subscriber result: `MSG` + subject name + subscription ID + message payload size + message payload `hello`.
+订阅者得到的结果:`MSG` + 主题名 + 订阅ID + payload大小 + payload `hello`。
 
 ```
 sub foo.* 90
@@ -86,7 +89,7 @@ MSG foo.bar 90 5
 hello
 ```
 
-**7. Publish another message with reply subject.**
+**7. 发布另外一条带回复主题的消息**
 
 ```
 pub foo.bar optional.reply.subject 5
@@ -94,31 +97,31 @@ hello
 +OK
 ```
 
-Subscriber result: `MSG` indicating message receipt.
+订阅结果:`MSG`，表示收到消息。
 
 ```
 MSG foo.bar 90 optional.reply.subject 5
 hello
 ```
 
-**8. Unsubscribe from interest in the subject.**
+**8. 取消订阅的主题**
 
-You can use the `UNSUB` command to unsubscribe from a message.
+您可以使用`UNSUB`命令取消订阅消息。
 
-Run the subscriber to unsubscribe:
+运行订阅程序来取消订阅:
 
 ```
 unsub 90 
 ```
 
-Subscriber result: `+OK` indicating successful deregistration of interest.
+订阅者结果:“+OK”表示已成功撤销订阅。
 
 ```
 unsub 90
 +OK
 ```
 
-**9. Reconnect to server and subscribe.**
+**9. 重新连接到服务器并订阅。**
 
 ```
 telnet demo.nats.io 4222
@@ -128,11 +131,12 @@ telnet demo.nats.io 4222
 sub foo.* 90
 ```
 
-**10. Explore the ping/pong interval.**
+**10. 关于ping/pong 时间间隔**
 
-If you leave your telnet session open for a few minutes, you may notice that your clients receives `ping` requests from the server. If your client is not active, or does not respond to the server pings within the ping/pong interval, the server disconnects the client. The error message is `-ERR 'Stale Connection'`.
+如果您将telnet会话打开几分钟，您可能会注意到您的客户端收到来自服务器的`ping`请求。
+如果您的客户端不活动，或者在ping/pong间隔内没有响应服务器ping信号，服务器将断开客户端的连接。错误消息是`-ERR 'Stale Connection'`。
 
-You can send a `ping` request to the serve and receive a `PONG` reply. For example:
+你可以向服务器发送一个`ping`请求，然后收到一个`PONG`回复。例如:
 
 ```
 $ telnet demo.nats.io 4222
@@ -144,3 +148,6 @@ INFO {"server_id":"NCXMJZYQEWUDJFLYLSTTE745I2WUNCVG3LJJ3NRKSFJXEG6RGK7753DJ","ve
 ping
 PONG
 ```
+
+
+[原文](https://github.com/nats-io/docs/blob/master/nats_protocol/nats-protocol-demo.md)

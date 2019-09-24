@@ -115,3 +115,6 @@ NATS发布者将数据参数发布到给定的主题。数据参数保持不变�
 ## 集群支持
 
 NATS客户端具有重连接逻辑。因此，如果您正在实现集群，则需要预先实现重连回调，这意味着您不能在运行时修改它。当您开始时，您需要已经拥有这些信息。
+
+
+[原文](https://github.com/nats-io/docs/blob/master/nats_protocol/nats-client-dev.md)
