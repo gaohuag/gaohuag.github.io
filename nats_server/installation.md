@@ -1,6 +1,9 @@
-# NATS Server Installation
+# NATS Server 安装
 
-NATS philosophy is simplicity. Installation is just decompressing a zip file and copying the binary to an appropriate directory; you can also use your favorite package manager. Here's a list of different ways you can install or run NATS:
+ NATS 的哲学是简单。安装只是解压缩zip文件并将二进制文件复制到适当的目录;
+
+您还可以使用您最喜欢的包管理器。下面是一些安装或运行NATS的不同方法:
+
 
 - [Docker](#installing-via-docker)
 - [Kubernetes](#installing-on-kubernetes-with-nats-operator)
@@ -9,9 +12,10 @@ NATS philosophy is simplicity. Installation is just decompressing a zip file and
 - [Development Build](#installing-from-the-source)
 
 
-### Installing via Docker
+### 通过 Docker 安装
 
-With Docker you can install the server easily without scattering binaries and other artifacts on your system. The only pre-requisite is to [install docker](https://docs.docker.com/install).
+使用Docker可以轻松安装服务器without scattering binaries and other artifacts on your system. 
+唯一的先决条件是 [安装 docker](https://docs.docker.com/install).
 
 ```
 > docker pull nats:latest
@@ -21,7 +25,7 @@ Status: Image is up to date for nats:latest
 docker.io/library/nats:latest
 ```
 
-To run NATS on Docker:
+在 Docker上运行 NATS :
 
 ```
 > docker run -p 4222:4222 -ti nats:latest
@@ -33,10 +37,10 @@ To run NATS on Docker:
 [1] 2019/05/24 15:42:58.229003 [INF] Listening for route connections on 0.0.0.0:6222
 ```
 
-More information on [containerized NATS is available here](/nats_docker/README.md).
+更多关于[容器化的 NATS](/nats_docker/README.md)的信息。
 
 
-### Installing on Kubernetes with NATS Operator
+### 通过 NATS Operator 在 Kubernetes 上安装 
 
 Installation via the NATS Operator is beyond this tutorial. You can read about the [NATS
 Operator](https://github.com/nats-io/nats-operator) here.
@@ -93,7 +97,8 @@ If you have Go installed, installing the binary is easy:
 > GO111MODULE=on go get github.com/nats-io/nats-server/v2
 ```
 
-This mechanism will install a build of [master](https://github.com/nats-io/nats-server), which almost certainly will not be a released version. If you are a developer and want to play with the latest, this is the easiest way. 
+This mechanism will install a build of [master](https://github.com/nats-io/nats-server), 
+which almost certainly will not be a released version. If you are a developer and want to play with the latest, this is the easiest way. 
 
 To test your installation (provided the $GOPATH/bin is set):
 

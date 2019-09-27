@@ -1,24 +1,22 @@
-# NATS Clients
+# NATS 客户端
+nats服务器不与任何客户端绑定。但是大多数客户端库都带有允许发布、订阅、发送请求和回复消息的工具。
+如果安装了客户机库，可以尝试使用绑定的客户端。否则，您先安装上客户端。
 
-The nats-server doesn't come bundled with any clients. But most client libraries come with tools that allow you to publish, subscribe, send requests and reply messages.
-
-If you have a client library installed, you can try using a bundled client. Otherwise, you can easily install some clients.
-
-### If you have Go installed:
+### 如果你要安装go的例子，执行下面命令:
 
 ```
 > go get github.com/nats-io/go-nats-examples/tools/nats-pub
 > go get github.com/nats-io/go-nats-examples/tools/nats-sub
 ```
 
-### Or download a zip file
+### 或者下载压缩文件：
 
-You can install pre-built binaries from the [go-nats-examples repo](https://github.com/nats-io/go-nats-examples/releases/tag/0.0.50)
+你可以从 [go-nats-examples repo](https://github.com/nats-io/go-nats-examples/releases/tag/0.0.50) 下载编译好的二进制文件。
 
 
 ### Testing your setup
 
-Open a terminal and [start a nats-server](running.md):
+打开控制台并且 [启动一个nats-server](running.md):
 ```
 > nats-server
 [29670] 2019/05/16 08:45:59.836809 [INF] Starting nats-server version 2.0.0
@@ -29,15 +27,17 @@ Open a terminal and [start a nats-server](running.md):
 ```
 
 
-On another terminal session start a subscriber:
+在另外一个终端开启一个订阅者:
 ```
 > nats-sub ">"
 Listening on [>]
 ```
 
-Note that when the client connected, the server didn't log anything interesting because server output is relatively quiet unless something interesting happens.
+注意，当客户端连接时，服务器没有记录任何有趣的内容，因为除非发生有趣的事情，否则服务器输出相对比较安静。
 
-To make the server output more lively, you can specify the `-V` flag to enable logging of server protocol tracing messages. Go ahead and `<ctrl>+c` the process running the server, and restart the server with the `-V` flag:
+要使服务器输出更详细，可以指定`-V `标志来启用服务器协议跟踪消息的日志记录。
+
+我们按下`<ctrl>+c`键，使用`-V`标志重新启动服务器:
 
 ```
 > nats-server -V
@@ -50,35 +50,36 @@ To make the server output more lively, you can specify the `-V` flag to enable l
 [29785] 2019/05/16 08:46:13.467200 [TRC] 127.0.0.1:49805 - cid:1 - <<- [PING]
 [29785] 2019/05/16 08:46:13.467206 [TRC] 127.0.0.1:49805 - cid:1 - ->> [PONG]
 ```
+如果您已经创建了订阅者，您应该注意到订阅者上的输出，该输出告诉您它已断开连接并重新连接。上面的服务器输出更有趣。
+您可以看到订阅者发送一个`CONNECT`协议消息和一个`PING`，服务器用一个`PONG`响应这个`PING`。
 
-If you had created a subscriber, you should notice output on the subscriber telling you that it disconnected, and reconnected. The server output above is more interesting. You can see the subscriber send a `CONNECT` protocol message and a `PING` which was responded to by the server with a `PONG`.
+> 您可以在这里了解更多关于[NATS协议](/nats_protocol/nats-protocol.md),的信息，但是比协议描述更有趣的是[一个交互式演示](/nats_protocol/nats-protocol-demo.md)。
 
-> You  can learn more about the [NATS protocol here](/nats_protocol/nats-protocol.md), but more intersting than the protocol description is [an interactive demo](/nats_protocol/nats-protocol-demo.md).
-
-On a third terminal, publish your first message:
+在第三个终端上，发布您的第一条消息:
 ```
 > nats-pub hello world
 Published [hello] : 'world'
 ```
 
-On the subscriber window you should see:
+在订阅者窗口，您应该看到:
 ```
 [#1] Received on [hello]: 'world'
 ```
 
 
-### Testing Against a Remote Server
+### 针对远程服务器进行测试
 
-If the NATS server were running in a different machine or a different port, you'd have to specify that to the client by specifying a _NATS URL_. NATS URLs take the form of: `nats://<server>:<port>` and `tls://<server>:<port>`. URLs with a `tls` protocol sport a secured TLS connection.
+如果NATS服务器运行在不同的机器或不同的端口，则客户端必须通过_NATS URL_指定服务器。
+NATS url的形式是:`NATS://:`和`tls://:`。带有`tls`协议的url具有安全的tls连接。
 
 ```
 > nats-sub -s nats://server:port ">"
 ```
 
-If you want to try on a remote server, the NATS team maintains a demo server you can reach at `demo.nats.io`.
+如果您想在远程服务器上尝试，NATS 团队维护一个演示服务器，您可以通过 `demo.nats.io` 访问该服务器。
 
 ```
 > nats-sub -s nats://demo.nats.io ">"
 ```
-
+本人翻译水平有限，读者朋友实在看不懂了，请参考[原文](https://github.com/nats-io/docs/blob/master/nats_server/clients.md)
 

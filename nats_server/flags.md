@@ -1,9 +1,9 @@
 # Flags
 
 
-The NATS server has many flags to customize its behavior without having to write a configuration file.
+NATS服务器有许多标记来定制其行为，而无需编写配置文件。
 
-The configuration flags revolve around:
+可选的标志围绕:
 
 - Server Options
 - Logging
@@ -25,12 +25,13 @@ The configuration flags revolve around:
 | `-c`, `--config` | Path to NATS server configuration file. |
 | `-sl`, `--signal` | Send a signal to nats-server process. See [process signaling](/nats_admin/signals.md). |
 | `--client_advertise` | Client HostPort to advertise to other servers. |
-| `-t` | Test configuration and exit |
+| `-t` | 测试配置并退出 |
 
 
 
-### Authentication Options
+### 身份验证选项
 
+以下选项控制直接的身份验证:
 The following options control straightforward authentication:
 
 | Flag | Description |
@@ -39,12 +40,12 @@ The following options control straightforward authentication:
 | `--pass` | Required _password_ for connections (exclusive of `--token`). |
 | `--auth` | Required _authorization token_ for connections (exclusive of `--user` and `--password`). |
 
-See [token authentication](tokens.md), and [username/password](username_password.md) for more information.
+有关更多信息，请参见 [token authentication](tokens.md) 和 [username/password](username_password.md)。 
 
 
-### Logging Options
+### 日志选项
 
-The following flags are available on the server to configure logging:
+在服务器上可以使用以下标志来配置日志:
 
 | Flag | Description |
 | :-------------------- | :-------- |
@@ -54,9 +55,9 @@ The following flags are available on the server to configure logging:
 | `-r`, `--remote_syslog` | The syslog server address, like `udp://localhost:514` |
 | `-D`, `--debug` | Enable debugging output |
 | `-V`, `--trace` | Enable protocol trace log messages |
-| `-DV` | Enable both debug and protocol trace messages |
+| `-DV` | 同时支持调试和协议跟踪消息 |
 
-You can read more about [logging configuration here](logging.md).
+您可以阅读更多关于 [日志配置](logging.md) 的信息。
 
 
 ### TLS Options
@@ -72,7 +73,7 @@ You can read more about [logging configuration here](logging.md).
 
 ### Cluster Options
 
-The following flags are available on the server to configure clustering:
+服务器上可用以下标志配置集群:
 
 
 | Flag | Description |
@@ -83,10 +84,10 @@ The following flags are available on the server to configure clustering:
 | `--cluster_advertise` | Cluster URL to advertise to other servers |
 | `--connect_retries` | For implicit routes, number of connect retries |
 
-You can read more about [clustering configuration here](clustering.md).
+您可以阅读更多关于[集群配置](clustering.md)的信息。
 
 
-### Common Options
+### 常见的选项
 
 | Flag | Description |
 | :-------------------- | :-------- |
