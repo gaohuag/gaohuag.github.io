@@ -1,8 +1,8 @@
-# Tutorials
+# 教程
 
-Tutorials are provided to give guidance on commonly used aspects of NATS. 
+本教程提供了关于NATS的常用方面的指导。
 
- * [Explore NATS Publish/Subscribe](pubsub.md)
- * [Explore NATS Request/Reply](reqreply.md)
- * [Explore NATS Queueing](queues.md)
- * [Advanced Connect and Custom Dialer in Go](custom_dialer.md)
+ * [探索NATS发布/订阅](pubsub.md)
+ * [探讨NATS的请求/回复](reqreply.md)
+ * [探索NATS排队](queues.md)
+ * [Go中的高级连接和自定义拨号](custom_dialer.md)

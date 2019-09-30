@@ -1,7 +1,7 @@
-## Securing NATS
+## 保护 NATS
 
-The NATS server provides several forms of security:
+NATS服务器提供多种形式的安全措施:
 
-- Connections can be [_encrypted_ with TLS](tls.md)
-- Client connections can require [_authentication_](auth_intro.md)
-- Clients can require [_authorization_](authorization.md) for subjects the publish or subscribe to
+- 连接可以 [使用 TLS _加密_](tls.md)
+- 客户端连接可能需要 [_认证_](auth_intro.md)
+- 客户端连接可能需要为发布或订阅的主题请求 [_授权_](authorization.md) 

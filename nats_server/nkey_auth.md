@@ -1,17 +1,20 @@
-## NKey Authentication
+## NKey 身份验证
 
-NKeys are a new, highly secure public-key signature system based on [Ed25519](https://ed25519.cr.yp.to/).
-
-With NKeys the server can verify identities without ever storing or ever seeing private keys. The authentication system works by requiring a connecting client to provide its public key and digitally sign a challenge with its private key. The server generates a random challenge with every connection request, making it immune to playback attacks. The generated signature is validated against the provided public key, thus proving the identity of the client. If the public key is known to the server, authentication succeeds.
-
-> NKey is an excellent replacement for token authentication because a connecting client will have to prove it controls the private key for the authorized public key.
-
-To generate nkeys, you'll need the [`nk` tool](/nats_tools/nk.md).
+NKeys是一种基于[Ed25519](https://ed25519.cr.yp.to/)的新型、高度安全的公钥签名系统。
 
 
-### Generating NKeys and Configuring the Server
+使用NKeys，服务器可以验证身份，而无需存储或查看私有密钥。身份验证系统要求连接的客户端提供其公钥，并使用其私钥对质询进行数字签名。
+服务器为每个连接请求生成一个随机挑战，使其不受回放攻击的影响。生成的签名根据提供的公钥进行验证，从而验证客户机的身份。
+如果服务器知道公钥，则身份验证成功。
 
-To generate a _User_ NKEY:
+> NKey是令牌身份验证的最佳替代方案，因为连接的客户端必须证明它控制了授权公钥的私钥。
+
+要生成nkeys，您需要 [`nk` tool](/nats_tools/nk.md).
+
+
+### 生成NKeys并配置服务器
+
+生成一个 _User_ NKEY:
 
 ```
 > nk -gen user -pubout
@@ -19,11 +22,11 @@ SUACSSL3UAHUDXKFSNVUZRF5UHPMWZ6BFDTJ7M6USDXIEDNPPQYYYCU3VY
 UDXU4RCSJNZOIQHZNWXHXORDPRTGNJAHAHFRGZNEEJCPQTT2M7NLCNF4
 ```
 
-The first output line starts with the letter `S` for _Seed_. The second letter, `U` stands for _User_.  Seeds are private keys; you should treat them as secrets and guard them with care.
+第一个输出行以字母`S`开头，表示_Seed_。第二个字母U代表_User_。种子是私钥;你应该把它们当作秘密对待，小心地保护它们。
 
-The second line starts with the letter `U` for _User_ and is a public key which can be safely shared.
+第二行以字母`U`开头，代表_User_，它是一个可以安全共享的公钥。
 
-To use nkey authentication, add a user, and set the `nkey` property to the public key of the user you want to authenticate:
+要使用nkey身份验证，请添加一个用户，并将`nkey`属性设置为要验证的用户的公钥:
 
 ```text
 authorization: {
@@ -36,9 +39,9 @@ authorization: {
 Note that the user section sets the `nkey` property (user/password/token properties are not needed). Add `permission` sections as required.
 
 
-### Client Configuration
+### 客户端配置
 
-Now that you have a user nkey, let's configure a client to use it for authentication. As an example, here are the connect options for the node client:
+现在您有了一个用户nkey，让我们配置一个客户端来使用它进行身份验证。例如，以下是nodejs客户端的连接选项:
 
 ```javascript
 const NATS = require('nats');
@@ -60,5 +63,5 @@ const nc = NATS.connect({
 ```
 
 The client provides a function that it uses to parse the seed (the private key) and sign the connection challenge.
-
+客户端提供一个用于解析种子(私钥)和签署连接挑战的函数。
 

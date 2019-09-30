@@ -1,6 +1,8 @@
-# Explore NATS Pub/Sub
+# 探索 NATS 发布/订阅
 
 NATS is a publish subscribe messaging system. Subscribers listening on a subject receive messages on that subject. If the subscriber is not actively listening on the subject, the message is not received. Subscribers can use the wildcard tokens such as  `*` and `>` to match a single token or to match the tail of a subject.
+NATS是一个发布订阅消息系统。监听某个主题的订阅者将收到该主题的消息。如果订阅者没有积极地订阅主题，消息将不会被接收。
+订阅者可以使用通配符`*`来匹配单个令牌，或使用`>`匹配主题的尾部。
 
 <div class="graphviz"><code data-viz="dot">
 digraph nats_pub_sub {
@@ -36,17 +38,17 @@ digraph nats_pub_sub {
 }
 </code></div>
 
-## Prerequisites
+## 先决条件
 
-Go and the NATS server should be installed. Optionally you can use the demo server located at `nats://demo.nats.io`
+Go和NATS服务器应该被安装。您也可以选择使用演示服务器（`nats://demo.nat .io`）做测试。
 
-### 1. Start the NATS server
+### 1. 启动NATS服务器
 
 ```sh
 % nats-server
 ```
 
-When the server starts successfully, you will see the following messages:
+当服务器成功启动时，您将看到以下消息:
 
 ```sh
 [1] 2019/31/05 15:18:22.301550 [INF] Starting nats-server version 2.0.0
@@ -54,107 +56,107 @@ When the server starts successfully, you will see the following messages:
 [1] 2019/31/05 15:18:22.301769 [INF] nats-server is ready
 ```
 
-The NATS server listens for client connections on TCP Port 4222.
+NATS服务器监听TCP端口4222上的客户端连接。
 
-### 2. Start a shell or command prompt session
+### 2. 启动shell或命令提示符会话
 
-You will use this session to run an example NATS client subscriber program.
+您将使用此会话运行一个示例NATS客户端订阅程序。
 
-### 3. CD to the Go client examples directory
+
+### 3. 切换到Go客户端示例目录
 
 ```sh
 % cd $GOPATH/src/github.com/nats-io/nats.go/examples
 ```
 
-### 4. Run the client subscriber program
+### 4. 运行客户端订阅程序
 
 ```sh
 % go run nats-sub/main.go <subject>
 ```
 
-Where `<subject>` is a subject to listen on. A valid subject is a string that is unique in the system.
+其中 `<subject>` 是要监听的主题。有效的主题是系统中唯一的字符串。
 
-For example:
+例如：
 
 ```sh
 % go run nats-sub/main.go msg.test
 ```
 
-You should see the message: *Listening on [msg.test]*
+您应该看到消息: *Listening on [msg.test]*
 
-### 5. Start another shell or command prompt session
+### 5. 启动另一个shell或命令提示符会话
 
-You will use this session to run a NATS publisher client.
+您将使用此会话运行NATS发布服务器客户端。
 
-## 6. CD to the examples directory
+## 6. 切换到Go客户端示例目录
 
 ```sh
 % cd $GOPATH/src/github.com/nats-io/nats.go/examples
 ```
 
-### 7. Publish a NATS message
+### 7. 发布NATS消息
 
 ```sh
 % go run nats-pub/main.go <subject> <message>
 ```
 
-Where `<subject>` is the subject name and `<message>` is the text to publish.
+其中 `<subject>` 是主题名称， `<message>` 是要发布的文本。
 
-For example:
+例如:
 
 ```sh
 % go run nats-pub/main.go msg.test hello
 ```
 
-or
+或者
 
 ```sh
 % go run nats-pub/main.go msg.test "NATS MESSAGE"
 ```
 
-### 8. Verify message publication and receipt
+### 8. 验证消息发布和接收
 
-You should see that the publisher sends the message: *Published [msg.test] : 'NATS MESSAGE'*
+您应该看到发布者发送了消息: *Published [msg.test] : 'NATS MESSAGE'*
 
-And that the subscriber receives the message: *[#1] Received on [msg.test]: 'NATS MESSAGE'*
+订阅者收到消息: *[#1] Received on [msg.test]: 'NATS MESSAGE'*
 
-Note that if the receiver does not get the message, check that you are using the same subject name for the publisher and the subscriber.
+注意，如果接收者没有收到消息，请检查发布者和订阅者是否使用相同的主题名称。
 
-### 9. Publish another message
+### 9. 发布另一个消息
 
 ```sh
 % go run nats-pub/main.go msg.test "NATS MESSAGE 2"
 ```
 
-You should see that the subscriber receive message 2. Note that the message count is incremented each time your subscribing client receives a message on that subject:
+您应该看到订阅者收到了消息2。请注意，每次您的订阅客户端收到关于该主题的消息时，消息计数都会增加:
+### 10. 启动另一个shell或命令提示符会话
 
-### 10. Start another shell or command prompt session
+您将使用此会话运行第二个NATS订阅服务器。
 
-You will use this session to run a second NATS subscriber.
-
-### 11. CD to the examples directory
+### 11. 切换到Go客户端示例目录
 
 ```sh
 % cd $GOPATH/src/github.com/nats-io/nats.go/examples
 ```
 
-### 12. Subscribe to the message
+### 12. 订阅消息
 
 ```sh
 % go run nats-sub/main.go msg.test
 ```
 
-### 13. Publish another message using the publisher client
+### 13. 使用发布服务器客户端发布另一条消息
 
 ```sh
 % go run nats-pub/main.go msg.test "NATS MESSAGE 3"
 ```
 
-Verify that both subscribing clients receive the message.
+验证两个订阅客户机都收到了消息。
 
-### 14. Start another shell or command prompt session
+### 14. 启动另一个shell或命令提示符会话
 
-You will use this session to run a third NATS subscriber.
+您将使用此会话运行第三个NATS订阅服务器。
 
 ### 15. CD to the examples directory
 
@@ -162,24 +164,24 @@ You will use this session to run a third NATS subscriber.
 % cd $GOPATH/src/github.com/nats-io/nats.go/examples
 ```
 
-### 16. Subscribe to a different message
-
+### 16. 订阅不同的消息
+       
 ```sh
 % go run nats-sub/main.go msg.test.new
 ```
+除最后一个订阅者外的所有订阅者都收到消息。为什么?因为订阅者没有监听发布者使用的消息主题。
 
-All the but last subscriber receives the message. Why? Because that subscriber is not listening on the message subject used by the publisher.
+### 17. 更新最后一个订阅服务器以使用通配符
 
-### 17. Update the last subscriber to use a wildcard
+NATS支持对消息订阅者使用通配符。不能使用通配符主题发布消息。
 
-NATS supports the use of wildcard characters for message subscribers. You cannot publish a message using a wildcard subject.
-
-Change the last subscriber the listen on msg.* and run it:
+更改最后一个用户订阅 msg.*，如下:
 
 ```sh
 % go run nats-sub/main.go msg.*
 ```
 
-### 18. Publish another message
-
-This time, all three subscribing clients should receive the message.
+### 18. 发布另一个消息
+        
+这一次，所有三个订阅客户机都应该收到消息。
+        

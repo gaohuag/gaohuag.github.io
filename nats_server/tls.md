@@ -1,9 +1,9 @@
-## TLS Configuration
+## TLS 配置
 
-The NATS server uses modern TLS semantics to encrypt client, route, and monitoring connections.
-Server configuration revolves around a `tls` map, which has the following properties:
+NATS服务器使用现代TLS语义来加密客户端、路由和监控连接。
 
-| Property | Description |
+服务器配置围绕一个`tls`映射，它有以下属性:
+| 属性 | 描述 |
 | :------  | :---- |
 | `ca_file` | TLS certificate authority file. |
 | `cert_file` | TLS certificate file. |
@@ -15,14 +15,14 @@ Server configuration revolves around a `tls` map, which has the following proper
 | `verify_and_map` | If `true`, require and verify client certificates and map certificate values for authentication purposes. |
 | `verify` | If `true`, require and verify client certificates. |
 
-The simplest configuration:
+最简单的配置:
 ```
 tls: {
   cert_file: "./server-cert.pem"
   key_file: "./server-key.pem"
 }
 ```
-Or by using [server options](./flags.md#tls-options):
+或使用[服务器选项](./flags.md#tls-options):
 ```
 > nats-server --tls --tlscert=./server-cert.pem --tlskey=./server-key.pem
 [21417] 2019/05/16 11:21:19.801539 [INF] Starting nats-server version 2.0.0
@@ -33,7 +33,7 @@ Or by using [server options](./flags.md#tls-options):
 [21417] 2019/05/16 11:21:19.801787 [INF] Server is ready
 ```
 
-Notice that the log indicates that the client connections will be required to use TLS. If you run the server in Debug mode with `-D` or `-DV`, the logs will show the cipher suite selection for each connected client:
+请注意，日志表明需要客户端连接后才能使用TLS。如果您在调试模式下运行服务器与`-D`或`-DV`，日志将显示为每个连接的客户端选择的加密方法:
 
 ```
 [22242] 2019/05/16 11:22:20.216322 [DBG] 127.0.0.1:51383 - cid:1 - Client connection created
@@ -42,13 +42,13 @@ Notice that the log indicates that the client connections will be required to us
 [22242] 2019/05/16 11:22:20.367291 [DBG] 127.0.0.1:51383 - cid:1 - TLS version 1.2, cipher suite TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 ```
 
-When a `tls` section is specified at the root of the configuration, it also affects the monitoring port if `https_port` option is specified. Other sections such as `cluster` can specify a `tls` block.
+当在配置的根目录中指定`tls`部分时，监控端口将使用`https_port`。其他部分，如`cluster`，可以指定`tls`块。
 
 
-### TLS Timeout
-
-The `timeout` setting enables you to control the amount of time that a client is allowed to upgrade its connection to tls. If your clients are experiencing disconnects during TLS handshake, you'll want to increase the value, however, if you do be aware that an extended `timeout` exposes your server to attacks where a client doesn't upgrade to TLS and thus consumes resources. Conversely, if you reduce the TLS `timeout` too much, you are likely to experience handshake errors.
-
+### TLS 超时
+“超时”设置使您能够控制允许客户端连接升级到tls的时间。如果您的客户端在TLS握手期间正在经历断开连接，那么您将希望增加该值，
+但是，如果您确实意识到扩展的“超时”将使您的服务器受到攻击，其中客户端没有升级到TLS，因此会消耗资源。相反，如果过多地减少TLS“超时”，
+则很可能出现握手错误。
 
 ```
 tls: {

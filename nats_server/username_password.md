@@ -1,8 +1,8 @@
-## Username and Password
+## 用户名和密码
 
-You can authenticate one or more clients using username and passwords; this enables you to have greater control over the management and issuance of credential secrets.
+您可以使用用户名和密码验证一个或多个客户端;这使您能够更好地控制凭证机密的管理和发布。
 
-For a single user:
+对于单个用户:
 ```
 authorization: {
     user: a,
@@ -10,13 +10,13 @@ authorization: {
 }
 ```
 
-You can also specify a single username/password by:
+你也可以指定一个单一的用户名/密码:
 
 ```
 > nats-server --user a --pass b
 ```
 
-For multiple users:
+为多个用户:
 ```
 authorization: {
     users: [
@@ -26,16 +26,16 @@ authorization: {
 }
 ```
 
-### Bcrypted Passwords
+### 加密的密码
 
-Username/password also supports bcrypted passwords using the [`mkpasswd`](/nats_tools/mkpasswd.md) tool. Simply replace the clear text password with the bcrypted entries:
+用户名/密码还支持使用[`mkpasswd`](/nats_tools/mkpasswd.md)工具加密的密码。只需将明文密码替换为加密的密码:
 
 ```
 > mkpasswd
 ass: (Uffs#rG42PAu#Oxi^BNng
 bcrypt hash: $2a$11$V1qrpBt8/SLfEBr4NJq4T.2mg8chx8.MTblUiTBOLV3MKDeAy.f7u
 ```
-And on the configuration file:
+配置文件:
 
 ```
 authorization: {
@@ -46,9 +46,10 @@ authorization: {
 }
 ```
 
-### Reloading a Configuration
+### 重新加载配置
 
-As you add/remove passwords from the server configuration file, you'll want your changes to take effect. To reload without restarting the server and disconnecting clients, do:
+
+当您从服务器配置文件中添加/删除密码时，您希望您的更改生效。要在不重启服务器和断开客户端连接的情况下重新加载，请执行以下操作:
 
 ```
 > nats-server --signal reload

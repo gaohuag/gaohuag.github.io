@@ -1,12 +1,13 @@
-# Running
+# 运行
+nat服务器有许多命令行参数。首先，您不必指定任何参数。
 
-The nats-server has many command line options. To get started, you don't have to specify anything.
-In the absence of any flags, the NATS server will start listening for NATS client connections on port 4222.
-By default, security is disabled.
+在没有任何参数的情况下，NATS服务器将开始监听端口4222上的NATS客户机连接。
 
-### Standalone
+默认情况下，不开启安全（tls）传输
 
-When the server starts it will print some information including where the server is listening for client connections:
+### 独立运行
+
+当服务器启动时，它会打印一些信息，包括服务器在哪里监听客户端连接:
 
 ```
 > nats-server
@@ -18,9 +19,9 @@ When the server starts it will print some information including where the server
 ```
 
 
-### Docker
+### Docker 中运行
 
-If you are running your NATS server in a docker container:
+如果你在docker容器中运行NATS服务器:
 
 ```
 > docker run -p 4222:4222 -ti nats:latest
@@ -33,4 +34,4 @@ If you are running your NATS server in a docker container:
 ...
 ```
 
-More information on [containerized NATS is available here](/nats_docker/README.md).
+更多信息参考 [containerized NATS is available here](/nats_docker/README.md).
