@@ -1,21 +1,28 @@
-## Monitoring NATS
+## 监控 NATS
 
 To monitor the NATS messaging system, `nats-server` provides a lightweight HTTP server on a dedicated monitoring port.
 The monitoring server provides several endpoints, providing statistics and other information about the following:
+为了监控 NATS消息传递系统，`nat-server`在专用的监听端口上提供了一个轻量级HTTP服务器。
 
-* [General Server Information](#General-Information)
-* [Connections](#Connection-Information)
-* [Routing](#Route-Information)
-* [Subscription Routing](#Subscription-Routing-Information)
-* [Gateways](#Gateway-Information)
+监控服务器提供了几个端点，提供了以下方面的统计信息和其他信息:
+
+
+* [通用服务器信息](#General-Information)
+* [连接](#Connection-Information)
+* [路由](#Route-Information)
+* [订阅路由](#Subscription-Routing-Information)
+* [网关](#Gateway-Information)
 
 All endpoints return a JSON object.
 
 The NATS monitoring endpoints support JSONP and CORS, making it easy to create single page monitoring web applications.
+所有端点返回一个JSON对象。
 
-### Enabling monitoring from the command line
+NATS监听端点支持JSONP和CORS，这使得创建单页监视web应用程序变得很容易。
 
-To enable the monitoring server, start the NATS server with the monitoring flag `-m` and the monitoring port, or turn it on in the [configuration file](configuration.md#configuration-properties).
+### 从命令行启用监控
+
+要启用监控服务器，请使用监控标记`-m`和监控端口启动 NATS 服务器，或者在[配置文件](configuration.md#configuration-properties)中打开它。
 
     -m, --http_port PORT             HTTP PORT for monitoring
     -ms,--https_port PORT            Use HTTPS PORT for monitoring
@@ -30,27 +37,28 @@ $ nats-server -m 8222
 [4528] 2019/06/01 20:09:58.573090 [INF] nats-server is ready</td>
 ```
 
-To test, run `nats-server -m 8222`, then go to <a href="http://demo.nats.io:8222/" target="_blank">http://demo.nats.io:8222/</a>
+要进行测试，请运行 `nats-server -m 8222`, 然后跳转到 <a href="http://demo.nats.io:8222/" target="_blank">http://demo.nats.io:8222/</a>
 
-### Enable monitoring from the configuration file
+### 从配置文件中启用监控
 
-You can also enable monitoring using the configuration file as follows:
+您还可以使用以下配置文件启用监控:
 
 ```yaml
 http_port: 8222
 ```
 
-For example, to monitor this server locally, the endpoint would be <a href="http://demo.nats.io:8222/varz" target="_blank">http://demo.nats.io:8222/varz</a> reports various general statistics.
+例如，要在本地监视此服务器，端点应该是<a href="http://demo.nats.io:8222/varz" target="_blank">http://demo.nats.io:8222/varz</a>，
+该接口暴露出各种一般统计数据。
 
-## Monitoring endpoints
+## 监控终端
 
-The following sections describe each supported monitoring endpoint: `varz`, `connz`, `routez`, `subsz`, and `gatewayz`.
-There are not any required arguments, however use of arguments can let you tailor monitoring to your environment
-and tooling.
+以下部分描述了每个受支持的监控端点: `varz`, `connz`, `routez`, `subsz`, 和 `gatewayz`。
 
-### General Information
+没有任何参数是必需的，但是使用参数可以让您根据情况调整监控和工具。
 
-The `/varz` endpoint returns general information about the server state and configuration.
+### 一般信息
+
+ `/varz` 端点返回关于服务器状态和配置的一般信息。
 
 **Endpoint:** `http://server:port/varz`
 
@@ -59,15 +67,15 @@ The `/varz` endpoint returns general information about the server state and conf
 | Success | 200 (OK)          |
 | Error   | 400 (Bad Request) |
 
-#### Arguments
+#### 参数
 
 N/A
 
-#### Example
+#### 举例
 
 <a href="http://demo.nats.io:8222/varz" target="_blank">http://demo.nats.io:8222/varz</a>
 
-#### Response
+#### 响应
 
 ```json
 {
@@ -120,10 +128,10 @@ N/A
 }
 ```
 
-### Connection Information
+### 连接信息
 
-The `/connz` endpoint reports more detailed information on current and recently closed connections.
-It uses a paging mechanism which defaults to 1024 connections.
+`/connz` 端点暴露出关于当前和最近关闭的连接的更详细的信息。
+它使用的分页机制默认为1024个连接。
 
 **Endpoint:** `http://server:port/connz`
 
@@ -132,21 +140,21 @@ It uses a paging mechanism which defaults to 1024 connections.
 | Success | 200 (OK)          |
 | Error   | 400 (Bad Request) |
 
-#### Arguments
+#### 参数
 
-| Argument | Values | Description |
+| 参数 | 值 | 描述 |
 |:---|:---|:---|
-| sort   | (*see sort options*)     | Sorts the results.  Default is connection ID.           |
-| auth   | true, 1, false, 0        | Include username.  Default is false.                    |
-| subs   | true, 1, false, 0        | Include subscriptions.  Default is false.               |
-| offset | number > 0               | Pagination offset.  Default is 0.                       |
-| limit  | number > 0               | Number of results to return.  Default is 1024.          |
-| cid    | number, valid id         | Return a connection by it's id                          |
-| state  | open, *closed,  any      | Return connections of partular state.  Default is open. |
+| sort   | (*see sort options*)     | 排序结果。默认是使用连接ID排序.          |
+| auth   | true, 1, false, 0        | 包括用户名。默认不包含                   |
+| subs   | true, 1, false, 0        | 包括订阅信息。默认不包含                 |
+| offset | number > 0               | 分页偏移。默认值为0。                    |
+| limit  | number > 0               | 返回的结果数目。默认是1024。             |
+| cid    | number, valid id         | 通过id返回一个连接                       |
+| state  | open, *closed,  any      | 返回连接的状态。默认是返回的。            |
 
-*The server will default to holding the last 10,000 closed connections.*
+*服务器将默认保存最后10,000个关闭的连接。*
 
-##### Sort Options
+##### 排序选项
 
 | Option | Sort by|
 |:---|:---|
@@ -164,17 +172,18 @@ It uses a paging mechanism which defaults to 1024 connections.
 |stop       | Stop time for a closed connection                    |
 |reason     | Reason for a closed connection                       |
 
-#### Examples
+#### 举例
 
-Get up to 1024 connections: <a href="http://demo.nats.io:8222/connz" target="_blank">http://demo.nats.io:8222/connz</a>
+最多1024个连接: <a href="http://demo.nats.io:8222/connz" target="_blank">http://demo.nats.io:8222/connz</a>
 
-Control limit and offset: <a href="http://demo.nats.io:8222/connz?limit=16&offset=128" target="_blank">http://demo.nats.io:8222/connz?limit=16&offset=128</a>.
+控制 limit 和 offset: <a href="http://demo.nats.io:8222/connz?limit=16&offset=128" target="_blank">http://demo.nats.io:8222/connz?limit=16&offset=128</a>.
 
-Get closed connection information: <a href="http://demo.nats.io:8222/connz?state=closed" target="_blank">http://demo.nats.io:8222/connz?state=closed</a>.
+关闭连接信息: <a href="http://demo.nats.io:8222/connz?state=closed" target="_blank">http://demo.nats.io:8222/connz?state=closed</a>.
 
-You can also report detailed subscription information on a per connection basis using subs=1. For example: <a href="http://demo.nats.io:8222/connz?limit=1&offset=1&subs=1" target="_blank">http://demo.nats.io:8222/connz?limit=1&offset=1&subs=1</a>.
+您也可以使用subs=1查看订阅的详细信息。 例如: <a href="http://demo.nats.io:8222/connz?limit=1&offset=1&subs=1" target="_blank">http://demo.nats.io:8222/connz?limit=1&offset=1&subs=1</a>。
 
-#### Response
+
+#### 响应
 
 ```json
 {
@@ -233,7 +242,7 @@ You can also report detailed subscription information on a per connection basis 
 }
 ```
 
-### Route Information
+### 路由信息
 
 The `/routez` endpoint reports information on active routes for a cluster.
 Routes are expected to be low, so there is no paging mechanism with this endpoint.
@@ -304,7 +313,7 @@ The `/subz` endpoint reports detailed information about the current subscription
 
 #### Example
 
-* Get subscription routing information:  <a href="http://demo.nats.io:8222/subsz" target="_blank">http://demo.nats.io:8222/subsz</a>
+* 获取路由信息:  <a href="http://demo.nats.io:8222/subsz" target="_blank">http://demo.nats.io:8222/subsz</a>
 
 #### Response
 
@@ -460,17 +469,18 @@ Like routes, the number of gateways are expected to be low, so there is no pagin
 }
 ```
 
-## Creating Monitoring Applications
+## 创建监控应用程序
 
-NATS monitoring endpoints support [JSONP](https://en.wikipedia.org/wiki/JSONP) and [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing#How_CORS_works). You can easily create single page web applications for monitoring. To do this you simply pass the `callback` query parameter to any endpoint.
+NATS 监控端点支持 [JSONP](https://en.wikipedia.org/wiki/JSONP) 和 [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing#How_CORS_works). 
+您可以轻松地创建用于监控的单页面web应用程序。为此，只需将`callback`查询参数传递给任何端点。
 
-For example:
+例如:
 
 ```sh
 http://demo.nats.io:8222/connz?callback=cb
 ```
 
-Here is a JQuery example implementation:
+下面是一个JQuery示例实现:
 
 ```javascript
 $.getJSON('http://demo.nats.io:8222/connz?callback=?', function(data) {
@@ -479,6 +489,8 @@ $.getJSON('http://demo.nats.io:8222/connz?callback=?', function(data) {
 
 ```
 
-## Monitoring Tools
+## 监控工具
 
-In addition to writing custom monitoring tools, you can monitor nats-server in Prometheus. The [Prometheus NATS Exporter](https://github.com/nats-io/prometheus-nats-exporter) allows you to configure the metrics you want to observe and store in Prometheus. There's a sample [Grafana](https://grafana.com) dashboard that you can use to visualize the server metrics.
+除了编写定制的监控工具之外，您还可以在 Prometheus 中监视nat-server。
+[Prometheus NATS出口商](https://github.com/nats-io/promethees-nats-exports)允许您配置希望在Prometheus观测和存储的指标。
+您可以使用一个示例[Grafana](https://grafana.com)指示板来可视化服务器指标。
