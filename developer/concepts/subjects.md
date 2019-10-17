@@ -1,6 +1,7 @@
-# Subject-based Messaging
+# 基于主题的消息传递
 
-Fundamentally NATS is about publishing and listening for messages. Both of these depend heavily on _Subjects_ which scope messages into streams or topics. At its simplest, a subject is just a string of characters that form a name the publisher and subscriber can use to find each other.
+从根本上说，NATS是关于发布和监听消息的。这两者都严重依赖于_主题_相关的消息流或主题。
+简单地说，subject就是一串字符，发布者和订阅者可以用它来查找彼此。
 
 <div class="graphviz"><code data-viz="dot">
 digraph g {
@@ -16,12 +17,12 @@ digraph g {
 }
 </code></div>
 
- The NATS server reserves a few characters as special, and the specification says that only "alpha-numeric" characters plus the "." should be used in subject names. Subjects are case-sensitive and cannot contain whitespace. For safety across clients, ASCII characters should be used, although this is subject to change in the future.
+NATS服务器保留了一些特殊字符，规范中说，只有“字母-数字”字符加上“.”应该用于主题名。主题是大小写敏感的，不能包含空格。
+为了跨客户机的安全，应该使用ASCII字符，尽管将来可能会发生变化。
 
-## Subject Hierarchies
+## 主题层次结构
 
-The `.` character is used to create a subject hierarchy. For example, a world clock application might define the following to logically group related subjects:
-
+`.`字符用于创建主题层次结构。例如，一个世界时钟应用程序可能定义以下内容来逻辑地分组相关的主题:
 ```markup
 time.us
 time.us.east
@@ -30,13 +31,20 @@ time.eu.east
 time.eu.warsaw
 ```
 
-## Wildcards
+## 通配符
 
-NATS provides two _wildcards_ that can take the place of one or more elements in a dot-separated subject. Subscribers can use these wildcards to listen to multiple subjects with a single subscription but Publishers will always use a fully specified subject, without the wildcard.
 
-### Matching A Single Token
+NATS提供了两个 _通配符_ ，可以代替点分隔主题中的一个或多个元素。
+订阅者可以使用这些通配符侦听多个主题，但发布者将始终使用完全指定的主题，而不使用通配符。
 
-The first wildcard is `*` which will match a single token. For example, if an application wanted to listen for eastern time zones, they could subscribe to `time.*.east`, which would match `time.us.east` and `time.eu.east`.
+
+### 匹配单个 Token
+
+The first wildcard is `*` which will match a single token.
+ For example, if an application wanted to listen for eastern time zones, they could subscribe to `time.*.east`, 
+ which would match `time.us.east` and `time.eu.east`.
+第一个通配符是 `*`，它将匹配单个令牌。例如，如果一个应用程序想要监听东部时区，他们可以订阅“`time.*.east`。
+匹配`time.us.east` 和 `time.eu.east`。
 
 <div class="graphviz"><code data-viz="dot">
 digraph g {
@@ -52,9 +60,14 @@ digraph g {
 }
 </code></div>
 
-### Matching Multiple Tokens
+### 匹配多个令牌
 
-The second wildcard is `>` which will match one or more tokens, and can only appear at the end of the subject. For example, `time.us.>` will match `time.us.east` and `time.us.east.atlanta`, while `time.us.*` would only match `time.us.east` since it can't match more than one token.
+The second wildcard is `>` which will match one or more tokens, and can only appear at the end of the subject. 
+For example, `time.us.>` will match `time.us.east` and `time.us.east.atlanta`,
+ 
+ while `time.us.*` would only match `time.us.east` since it can't match more than one token.
+第二个通配符是 `>` ，它将匹配一个或多个标记，并且只能出现在主题的末尾。
+例如,“`time.us.>`将匹配 `time.us.east` and `time.us.east.atlanta`,而`time.us.*` 只配得上`time.us.east` 。因为它只能匹配一个符号。
 
 <div class="graphviz"><code data-viz="dot">
 digraph g {
@@ -72,6 +85,8 @@ digraph g {
 }
 </code></div>
 
-### Monitoring and Wire Taps
+### 监控和窃听
 
-Subject to your security configuration, wildcards can be used for monitoring by creating something sometimes called a *wire tap*. In the simplest case you can create a subscriber for `>`. This application will receive all messages -- again, subject to security settings -- sent on your NATS cluster.
+
+根据您的安全配置，通配符可以通过创建有时称为 *wire tap* 的东西来用于监控。在最简单的情况下，您可以用通配符 `>`创建一个订阅服务器。
+这个应用程序将接收所有在NATS集群上发送的消息(同样，取决于安全设置)。

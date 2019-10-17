@@ -1,6 +1,12 @@
-# Publish-Subscribe
+# 发布-订阅
 
-NATS implements a publish-subscribe message distribution model for one-to-many communication. A publisher sends a message on a subject and any active subscriber listening on that subject receives the message. Subscribers can also register interest in wildcard subjects that work a bit like a regular expression (but only a bit). This one-to-many pattern is sometimes called fan-out.
+NATS implements a publish-subscribe message distribution model for one-to-many communication. 
+A publisher sends a message on a subject and any active subscriber listening on that subject receives the message. 
+Subscribers can also register interest in wildcard subjects that work a bit like a regular expression (but only a bit). 
+This one-to-many pattern is sometimes called fan-out.
+NATS实现了一对多通信的发布-订阅 消息分发模型。发布者发送关于主题的消息，而监听该主题的任何活动订阅者将接收该消息。
+订阅者还可以注册对通配符主题感兴趣的内容，通配符的工作原理有点像正则表达式(但只有一点点)。这种一对多的模式有时被称为扇出。
+
 
 <div class="graphviz"><code data-viz="dot">
 digraph nats_pub_sub {
@@ -18,4 +24,4 @@ digraph nats_pub_sub {
 }
 </code></div>
 
-Try NATS publish subscribe on your own, using a live server by walking through the [pub-sub tutorial](../tutorials/pubsub.md).
+尝试使用启动好的服务器自己发布订阅主题，请浏览[pub-sub tutorial](../tutorials/pubsub.md)。

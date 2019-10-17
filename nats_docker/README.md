@@ -1,32 +1,32 @@
 
-## NATS Server Containerization
+## NATS Server 容器化
 
-The NATS server is provided as a Docker image on [Docker Hub](https://hub.docker.com/_/nats/) that you can run using the Docker daemon. The NATS server Docker image is extremely lightweight, coming in under 10 MB in size.
+NATS server 在 [Docker Hub](https://hub.docker.com/_/nats/)上以Docker映像的形式提供，您可以使用Docker守护进程运行它。
+ NATS server Docker 镜像是非常轻量级的，大小不到10 MB。
 
-[Synadia](https://synadia.com) actively maintains and supports the NATS server Docker image.
+[Synadia](https://synadia.com) 积极维护和支持NATS服务器Docker映像。
 
-### Usage
+### 使用
 
-To use the Docker container image, install Docker and pull the public image:
+要使用Docker容器映像，请安装Docker并拉取公共映像:
 
 ```sh
 > docker pull nats
 ```
 
-Run the NATS server image:
+运行NATS服务器映像:
 
 ```sh
 > docker run -d --name nats-main nats
 ```
 
-By default the NATS server exposes multiple ports:
+默认情况下，NATS服务器暴露多个端口:
+- 4222 是为客户端连接。
+- 8222 是一个用于信息报告的HTTP管理端口。
+- 6222 是一个用于集群的路由端口。
+- 使用-p或-P自定义。
 
-- 4222 is for clients.
-- 8222 is an HTTP management port for information reporting.
-- 6222 is a routing port for clustering.
-- Use -p or -P to customize.
-
-For example:
+举例:
 
 ```sh
 $ docker run -d --name nats-main nats
@@ -37,19 +37,20 @@ $ docker run -d --name nats-main nats
 [INF] nats-server is ready
 ```
 
-To run with the ports exposed on the host:
+运行端口暴露在主机上:
 
 ```sh
 > docker run -d -p 4222:4222 -p 6222:6222 -p 8222:8222 --name nats-main nats
 ```
 
-To run a second server and cluster them together:
+运行第二台服务器并将它们聚在一起:
 
 ```sh
 > docker run -d --name=nats-2 --link nats-main nats --routes=nats-route://ruser:T0pS3cr3t@nats-main:6222
 ```
 
-**NOTE** Since the Docker image protects routes using credentials we need to provide them above. Extracted [from Docker image configuration](https://github.com/nats-io/nats-docker/blob/master/amd64/nats-server.conf#L16-L20)
+**注意** Docker映像需要使用我们上面提供的凭证来保护路由。 
+摘自 [from Docker image configuration](https://github.com/nats-io/nats-docker/blob/master/amd64/nats-server.conf#L16-L20)：
 
 ```ascii
 # Routes are protected, so need to use them with --routes flag
@@ -61,7 +62,7 @@ authorization {
 }
 ```
 
-To verify the routes are connected:
+确认路由是否已连接:
 
 ```sh
 $ docker run -d --name=nats-2 --link nats-main nats --routes=nats-route://ruser:T0pS3cr3t@nats-main:6222 -DV
@@ -77,9 +78,9 @@ $ docker run -d --name=nats-2 --link nats-main nats --routes=nats-route://ruser:
 [DBG] 172.17.0.52:6222 - rid:1 - Route sent local subscriptions
 ```
 
-## Clustering With Docker
+## 使用Docker进行集群化
 
-Below is are a couple examples of how to setup nats-server cluster using Docker. We put 3 different configurations (one per nats-server server) under a folder named conf as follows:
+下面是一些使用Docker设置nat-server集群的例子。我们在一个名为conf的文件夹下放置了3个不同的配置(每个nat-server服务器一个)，如下所示:
 
 ```ascii
 |-- conf
@@ -88,12 +89,11 @@ Below is are a couple examples of how to setup nats-server cluster using Docker.
     |-- nats-server-C.conf
 ```
 
-Each one of those files have the following content below: (Here I am using ip 192.168.59.103 as an example, so just replace with the proper ip from your server)
+每个文件都有以下内容:(这里我使用的是ip 192.168.59.103作为示例，因此只需替换来自服务器的适当ip即可)
 
 ### Example 1: Setting up a cluster on 3 different servers provisioned beforehand
 
-In this example, the three servers are started with config files that know about the other servers.
-
+在本例中，三个服务器都是使用配置文件启动的，配置文件知道其他服务器的情况。
 #### nats-server-A
 
 ```ascii
@@ -148,8 +148,7 @@ cluster {
 }
 ```
 
-To start the containers, on each one of your servers, you should be able to start the nats-server image as follows:
-
+要启动每个服务器上的容器，您应该能够启动以下的nat-server映像:
 ```sh
 docker run -it -p 0.0.0.0:7222:7222 -p 0.0.0.0:7244:7244 --rm -v $(pwd)/conf/nats-server-A.conf:/tmp/cluster.conf nats -c /tmp/cluster.conf -p 7222 -D -V
 ```
@@ -164,14 +163,17 @@ docker run -it -p 0.0.0.0:9222:9222 -p 0.0.0.0:7248:7248 --rm -v $(pwd)/conf/nat
 
 ### Example 2: Setting a nats-server cluster one by one
 
-In this scenario:
+在这种情况下:
 
-- We bring up A and get its ip (nats-route://192.168.59.103:7244)
-- Then create B and then use address of A in its configuration.
-- Get the address of B nats-route://192.168.59.104:7246 and create C and use the addresses of A and B.
+- 我们调出A并获取其ip (nat -route://192.168.59.103:7244)
 
-First, we create the Node A and start up a nats-server server with the following config:
+- 然后创建B，然后在其配置中使用A的地址。
 
+- 获取B的地址nat-route://192.168.59.104:7246，创建C，使用A和B的地址。
+
+
+
+首先，我们创建节点A，并使用以下配置启动一个nat-server服务器:
 ```ascii
 # Cluster Server A
 
@@ -188,7 +190,7 @@ cluster {
 docker run -it -p 0.0.0.0:4222:4222 -p 0.0.0.0:7244:7244 --rm -v $(pwd)/conf/nats-server-A.conf:/tmp/cluster.conf nats -c /tmp/cluster.conf -p 4222 -D -V
 ```
 
-Then we proceed to create the next node. We realize that the first node has ip:port as `192.168.59.103:7244` so we add this to the routes configuration as follows:
+然后我们继续创建下一个节点。我们发现第一个节点的ip:port为`192.168.59.103:7244`，因此我们将其添加到路由配置中，如下所示:
 
 ```ascii
 # Cluster Server B
@@ -205,13 +207,13 @@ cluster {
 }
 ```
 
-Then start server B:
+然后启动服务器B:
 
 ```sh
 docker run -it -p 0.0.0.0:4222:4222 -p 0.0.0.0:7244:7244 --rm -v $(pwd)/conf/nats-server-B.conf:/tmp/cluster.conf nats -c /tmp/cluster.conf -p 4222 -D -V
 ```
 
-Finally, we create another Node C. We now know the routes of A and B so we can add it to its configuration:
+最后，我们创建另一个节点c。我们现在知道了A和B的路由，所以我们可以添加到它的配置:
 
 ```ascii
 # Cluster Server C
@@ -229,15 +231,16 @@ cluster {
 }
 ```
 
-Then start it:
+然后启动它:
 
 ```sh
 docker run -it -p 0.0.0.0:4222:4222 -p 0.0.0.0:7244:7244 --rm -v $(pwd)/conf/nats-server-C.conf:/tmp/cluster.conf nats -c /tmp/cluster.conf -p 9222 -D -V
 ```
 
-### Testing the Clusters
+### 测试集群
+    
 
-Now, the following should work: make a subscription to Node A then publish to Node C. You should be able to to receive the message without problems.
+现在，应该可以执行以下操作:订阅节点a，然后发布到节点c。您应该能够毫无问题地接收消息。
 
 ```sh
 nats-sub -s "nats://192.168.59.103:7222" hello &
@@ -253,6 +256,6 @@ nats-pub -s "nats://192.168.59.105:7222" hello world
 [1] 2015/06/23 05:20:31.100600 [TRC] 10.0.2.2:51007 - cid:8 - <<- [MSG hello 2 5]
 ```
 
-## Tutorial
+## 教程
 
-See the [NATS Docker tutorial](tutorial.md) for more instructions on using the NATS server Docker image.
+有关使用NATS服务器Docker映像的更多说明，请参阅 [NATS Docker tutorial](nats-docker-tutorial.md)。
