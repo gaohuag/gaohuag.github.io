@@ -1,6 +1,7 @@
 # Developing with NATS
 
-Developing with NATS is a combination of distributed application techniques, common NATS features and library specific syntax. As well as using this book for guidance, some of the libraries contain language-familiar formats of their API. For example, the Go library has godoc, and the Java library has javadoc.
+使用NATS进行开发是分布式应用技术、常见的NATS特性和特定语言库语法的组合。除了使用这本书作为指导之外，
+一些库还包含它们的API的语言熟悉的格式。例如，Go库有godoc, Java库有javadoc。
 
 | Library | Doc Link |
 | ------------- | ------------- |
@@ -10,4 +11,5 @@ Developing with NATS is a combination of distributed application techniques, com
 | [nats.rb](https://github.com/nats-io/nats.rb) | [yard](https://www.rubydoc.info/gems/nats) |
 | [nats.ts](https://github.com/nats-io/nats.ts) | [ts-doc](https://nats-io.github.io/nats.ts) |
 
-Not all libraries contain this separate doc, depending on the language community, but be sure to check out the client libraries README for more information.
+
+根据语言社区的不同，不是所有的库都包含这个单独的文档，但是一定要查看client libraries README以获得更多信息。

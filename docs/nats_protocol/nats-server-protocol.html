@@ -1,0 +1,3219 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>NATS Cluster Protocol · NATS</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="The NATS Maintainers">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-toggle-chapters/toggle.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-anchors/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="nats-client-dev.html" />
+    
+
+<link rel="stylesheet" href="https://cdn.materialdesignicons.com/3.6.95/css/materialdesignicons.min.css">
+
+    </head>
+    <body>
+        
+
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../whats_new/whats_new_20.html">
+            
+                <a href="../whats_new/whats_new_20.html">
+            
+                    
+                    What's New in 2.0
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../faq.html">
+            
+                <a href="../faq.html">
+            
+                    
+                    FAQ
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" >
+            
+                <a target="_blank" href="https://nats.io">
+            
+                    
+                    nats.io
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Concepts</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../developer/concepts/intro.html">
+            
+                <a href="../developer/concepts/intro.html">
+            
+                    
+                    What is NATS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../developer/concepts/subjects.html">
+            
+                <a href="../developer/concepts/subjects.html">
+            
+                    
+                    Subject-Based Messaging
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../developer/concepts/pubsub.html">
+            
+                <a href="../developer/concepts/pubsub.html">
+            
+                    
+                    Publish-Subscribe
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="../developer/concepts/reqreply.html">
+            
+                <a href="../developer/concepts/reqreply.html">
+            
+                    
+                    Request-Reply
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="../developer/concepts/queue.html">
+            
+                <a href="../developer/concepts/queue.html">
+            
+                    
+                    Queue Groups
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="../developer/concepts/acks.html">
+            
+                <a href="../developer/concepts/acks.html">
+            
+                    
+                    Acknowledgements
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.7" data-path="../developer/concepts/seq_num.html">
+            
+                <a href="../developer/concepts/seq_num.html">
+            
+                    
+                    Sequence Numbers
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Developing With NATS</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../developer/">
+            
+                <a href="../developer/">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../developer/connecting/intro.html">
+            
+                <a href="../developer/connecting/intro.html">
+            
+                    
+                    Connecting
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.2.1" data-path="../developer/connecting/default_server.html">
+            
+                <a href="../developer/connecting/default_server.html">
+            
+                    
+                    Connecting to the Default Server
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.2" data-path="../developer/connecting/specific_server.html">
+            
+                <a href="../developer/connecting/specific_server.html">
+            
+                    
+                    Connecting to a Specific Server
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.3" data-path="../developer/connecting/cluster.html">
+            
+                <a href="../developer/connecting/cluster.html">
+            
+                    
+                    Connecting to a Cluster
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.4" data-path="../developer/connecting/connect_timeout.html">
+            
+                <a href="../developer/connecting/connect_timeout.html">
+            
+                    
+                    Setting a Connect Timeout
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.5" data-path="../developer/connecting/pingpong.html">
+            
+                <a href="../developer/connecting/pingpong.html">
+            
+                    
+                    Ping/Pong Protocol
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.6" data-path="../developer/connecting/protocol.html">
+            
+                <a href="../developer/connecting/protocol.html">
+            
+                    
+                    Controlling the Client/Server Protocol
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.7" data-path="../developer/connecting/noecho.html">
+            
+                <a href="../developer/connecting/noecho.html">
+            
+                    
+                    Turning Off Echo'd Messages
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../developer/reconnect/intro.html">
+            
+                <a href="../developer/reconnect/intro.html">
+            
+                    
+                    Automatic Reconnections
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.3.1" data-path="../developer/reconnect/disable.html">
+            
+                <a href="../developer/reconnect/disable.html">
+            
+                    
+                    Disabling Reconnect
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.2" data-path="../developer/reconnect/max.html">
+            
+                <a href="../developer/reconnect/max.html">
+            
+                    
+                    Set the Number of Reconnect Attempts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.3" data-path="../developer/reconnect/wait.html">
+            
+                <a href="../developer/reconnect/wait.html">
+            
+                    
+                    Pausing Between Reconnect Attempts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.4" data-path="../developer/reconnect/random.html">
+            
+                <a href="../developer/reconnect/random.html">
+            
+                    
+                    Avoiding the Thundering Herd
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.5" data-path="../developer/reconnect/events.html">
+            
+                <a href="../developer/reconnect/events.html">
+            
+                    
+                    Listening for Reconnect Events
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.6" data-path="../developer/reconnect/buffer.html">
+            
+                <a href="../developer/reconnect/buffer.html">
+            
+                    
+                    Buffering Messages During Reconnect Attempts
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../developer/security/intro.html">
+            
+                <a href="../developer/security/intro.html">
+            
+                    
+                    Securing Connections
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.4.1" data-path="../developer/security/userpass.html">
+            
+                <a href="../developer/security/userpass.html">
+            
+                    
+                    Authenticating with a User and Password
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.2" data-path="../developer/security/token.html">
+            
+                <a href="../developer/security/token.html">
+            
+                    
+                    Authenticating with a Token
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.3" data-path="../developer/security/nkey.html">
+            
+                <a href="../developer/security/nkey.html">
+            
+                    
+                    Authenticating with an NKey
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.4" data-path="../developer/security/creds.html">
+            
+                <a href="../developer/security/creds.html">
+            
+                    
+                    Authenticating with a Credentials File
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.5" data-path="../developer/security/tls.html">
+            
+                <a href="../developer/security/tls.html">
+            
+                    
+                    Encrypting Connections with TLS
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../developer/receiving/intro.html">
+            
+                <a href="../developer/receiving/intro.html">
+            
+                    
+                    Receiving Messages
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.5.1" data-path="../developer/receiving/sync.html">
+            
+                <a href="../developer/receiving/sync.html">
+            
+                    
+                    Synchronous Subscriptions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5.2" data-path="../developer/receiving/async.html">
+            
+                <a href="../developer/receiving/async.html">
+            
+                    
+                    Asynchronous Subscriptions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5.3" data-path="../developer/receiving/unsubscribing.html">
+            
+                <a href="../developer/receiving/unsubscribing.html">
+            
+                    
+                    Unsubscribing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5.4" data-path="../developer/receiving/unsub_after.html">
+            
+                <a href="../developer/receiving/unsub_after.html">
+            
+                    
+                    Unsubscribing After N Messages
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5.5" data-path="../developer/receiving/reply.html">
+            
+                <a href="../developer/receiving/reply.html">
+            
+                    
+                    Replying to a Message
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5.6" data-path="../developer/receiving/wildcards.html">
+            
+                <a href="../developer/receiving/wildcards.html">
+            
+                    
+                    Wildcard Subscriptions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5.7" data-path="../developer/receiving/queues.html">
+            
+                <a href="../developer/receiving/queues.html">
+            
+                    
+                    Queue Subscriptions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5.8" data-path="../developer/receiving/drain.html">
+            
+                <a href="../developer/receiving/drain.html">
+            
+                    
+                    Draining Messages Before Disconnect
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5.9" data-path="../developer/receiving/structure.html">
+            
+                <a href="../developer/receiving/structure.html">
+            
+                    
+                    Structured Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../developer/sending/intro.html">
+            
+                <a href="../developer/sending/intro.html">
+            
+                    
+                    Sending Messages
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.6.1" data-path="../developer/sending/replyto.html">
+            
+                <a href="../developer/sending/replyto.html">
+            
+                    
+                    Including a Reply Subject
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6.2" data-path="../developer/sending/request_reply.html">
+            
+                <a href="../developer/sending/request_reply.html">
+            
+                    
+                    Request-Reply Semantics
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6.3" data-path="../developer/sending/caches.html">
+            
+                <a href="../developer/sending/caches.html">
+            
+                    
+                    Caches, Flush and Ping
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6.4" data-path="../developer/sending/structure.html">
+            
+                <a href="../developer/sending/structure.html">
+            
+                    
+                    Sending Structured Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7" data-path="../developer/events/intro.html">
+            
+                <a href="../developer/events/intro.html">
+            
+                    
+                    Monitoring the Connection
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.7.1" data-path="../developer/events/events.html">
+            
+                <a href="../developer/events/events.html">
+            
+                    
+                    Listen for Connection Events
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.7.2" data-path="../developer/events/slow.html">
+            
+                <a href="../developer/events/slow.html">
+            
+                    
+                    Slow Consumers
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8" data-path="../developer/tutorials/intro.html">
+            
+                <a href="../developer/tutorials/intro.html">
+            
+                    
+                    Tutorials
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.8.1" data-path="../developer/tutorials/pubsub.html">
+            
+                <a href="../developer/tutorials/pubsub.html">
+            
+                    
+                    Explore NATS Pub/Sub
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8.2" data-path="../developer/tutorials/reqreply.html">
+            
+                <a href="../developer/tutorials/reqreply.html">
+            
+                    
+                    Explore NATS Request/Reply
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8.3" data-path="../developer/tutorials/queues.html">
+            
+                <a href="../developer/tutorials/queues.html">
+            
+                    
+                    Explore NATS Queueing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.8.4" data-path="../developer/tutorials/custom_dialer.html">
+            
+                <a href="../developer/tutorials/custom_dialer.html">
+            
+                    
+                    Advanced Connect and Custom Dialer in Go
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">NATS Server</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../nats_server/installation.html">
+            
+                <a href="../nats_server/installation.html">
+            
+                    
+                    Installing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../nats_server/running.html">
+            
+                <a href="../nats_server/running.html">
+            
+                    
+                    Running
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.2.1" data-path="../nats_server/windows_srv.html">
+            
+                <a href="../nats_server/windows_srv.html">
+            
+                    
+                    Window Service
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="../nats_server/clients.html">
+            
+                <a href="../nats_server/clients.html">
+            
+                    
+                    Clients
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="../nats_server/flags.html">
+            
+                <a href="../nats_server/flags.html">
+            
+                    
+                    Flags
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="../nats_server/configuration.html">
+            
+                <a href="../nats_server/configuration.html">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.5.1" data-path="../nats_server/securing_nats.html">
+            
+                <a href="../nats_server/securing_nats.html">
+            
+                    
+                    Securing NATS
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.5.1.1" data-path="../nats_server/tls.html">
+            
+                <a href="../nats_server/tls.html">
+            
+                    
+                    Enabling TLS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.1.2" data-path="../nats_server/auth_intro.html">
+            
+                <a href="../nats_server/auth_intro.html">
+            
+                    
+                    Authentication
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.5.1.2.1" data-path="../nats_server/tokens.html">
+            
+                <a href="../nats_server/tokens.html">
+            
+                    
+                    Tokens
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.1.2.2" data-path="../nats_server/username_password.html">
+            
+                <a href="../nats_server/username_password.html">
+            
+                    
+                    Username/Password
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.1.2.3" data-path="../nats_server/tls_mutual_auth.html">
+            
+                <a href="../nats_server/tls_mutual_auth.html">
+            
+                    
+                    TLS Authentication
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.1.2.4" data-path="../nats_server/nkey_auth.html">
+            
+                <a href="../nats_server/nkey_auth.html">
+            
+                    
+                    NKeys
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.1.2.5" data-path="../nats_server/accounts.html">
+            
+                <a href="../nats_server/accounts.html">
+            
+                    
+                    Accounts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.1.2.6" data-path="../nats_server/jwt_auth.html">
+            
+                <a href="../nats_server/jwt_auth.html">
+            
+                    
+                    JWTs
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.1.2.7" data-path="../nats_server/auth_timeout.html">
+            
+                <a href="../nats_server/auth_timeout.html">
+            
+                    
+                    Authentication Timeout
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.1.3" data-path="../nats_server/authorization.html">
+            
+                <a href="../nats_server/authorization.html">
+            
+                    
+                    Authorization
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.2" data-path="../nats_server/clustering.html">
+            
+                <a href="../nats_server/clustering.html">
+            
+                    
+                    Clustering
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.5.2.1" data-path="../nats_server/cluster_config.html">
+            
+                <a href="../nats_server/cluster_config.html">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.2.2" data-path="../nats_server/cluster_tls.html">
+            
+                <a href="../nats_server/cluster_tls.html">
+            
+                    
+                    TLS Authentication
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.3" data-path="../gateways/">
+            
+                <a href="../gateways/">
+            
+                    
+                    Gateways
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.5.3.1" data-path="../gateways/gateway.html">
+            
+                <a href="../gateways/gateway.html">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.4" data-path="../leafnodes/">
+            
+                <a href="../leafnodes/">
+            
+                    
+                    Leaf Nodes
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.5.4.1" data-path="../leafnodes/leafnode_conf.html">
+            
+                <a href="../leafnodes/leafnode_conf.html">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.5" data-path="../nats_server/logging.html">
+            
+                <a href="../nats_server/logging.html">
+            
+                    
+                    Logging
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5.6" data-path="../nats_server/monitoring.html">
+            
+                <a href="../nats_server/monitoring.html">
+            
+                    
+                    Monitoring
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.6" data-path="../nats_admin/">
+            
+                <a href="../nats_admin/">
+            
+                    
+                    Managing A NATS Server
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.6.1" data-path="../nats_admin/upgrading_cluster.html">
+            
+                <a href="../nats_admin/upgrading_cluster.html">
+            
+                    
+                    Upgrading a Cluster
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.6.2" data-path="../nats_admin/slow_consumers.html">
+            
+                <a href="../nats_admin/slow_consumers.html">
+            
+                    
+                    Slow Consumers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.6.3" data-path="../nats_admin/signals.html">
+            
+                <a href="../nats_admin/signals.html">
+            
+                    
+                    Signals
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.6.4" data-path="../sys_accounts/">
+            
+                <a href="../sys_accounts/">
+            
+                    
+                    System Accounts
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.6.4.1" data-path="../sys_accounts/sys_accounts.html">
+            
+                <a href="../sys_accounts/sys_accounts.html">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.7" data-path="../nats_docker/">
+            
+                <a href="../nats_docker/">
+            
+                    
+                    NATS and Docker
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.7.1" data-path="../nats_docker/nats-docker-tutorial.html">
+            
+                <a href="../nats_docker/nats-docker-tutorial.html">
+            
+                    
+                    Tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.7.2" data-path="../nats_docker/docker_swarm.html">
+            
+                <a href="../nats_docker/docker_swarm.html">
+            
+                    
+                    Docker Swarm
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">NATS Tools</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../nats_tools/mkpasswd.html">
+            
+                <a href="../nats_tools/mkpasswd.html">
+            
+                    
+                    mkpasswd
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../nats_tools/nk.html">
+            
+                <a href="../nats_tools/nk.html">
+            
+                    
+                    nk
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="../nats_tools/nsc/">
+            
+                <a href="../nats_tools/nsc/">
+            
+                    
+                    nsc
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="5.3.1" data-path="../nats_tools/nsc/nsc.html">
+            
+                <a href="../nats_tools/nsc/nsc.html">
+            
+                    
+                    Basics
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3.2" data-path="../nats_tools/nsc/streams.html">
+            
+                <a href="../nats_tools/nsc/streams.html">
+            
+                    
+                    Streams
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3.3" data-path="../nats_tools/nsc/services.html">
+            
+                <a href="../nats_tools/nsc/services.html">
+            
+                    
+                    Services
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3.4" data-path="../nats_tools/nsc/signing_keys.html">
+            
+                <a href="../nats_tools/nsc/signing_keys.html">
+            
+                    
+                    Signing Keys
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4" data-path="../nats_tools/nas/">
+            
+                <a href="../nats_tools/nas/">
+            
+                    
+                    nats-account-server
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="5.4.1" data-path="../nats_tools/nas/nas_conf.html">
+            
+                <a href="../nats_tools/nas/nas_conf.html">
+            
+                    
+                    Basics
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4.2" data-path="../nats_tools/nas/inspecting_jwts.html">
+            
+                <a href="../nats_tools/nas/inspecting_jwts.html">
+            
+                    
+                    Inspecting JWTs
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4.3" data-path="../nats_tools/nas/dir_store.html">
+            
+                <a href="../nats_tools/nas/dir_store.html">
+            
+                    
+                    Directory Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4.4" data-path="../nats_tools/nas/notifications.html">
+            
+                <a href="../nats_tools/nas/notifications.html">
+            
+                    
+                    Update Notifications
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.4.5" data-path="../nats_tools/nas/mem_resolver.html">
+            
+                <a href="../nats_tools/nas/mem_resolver.html">
+            
+                    
+                    Memory Resolver
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5.5" data-path="../nats_tools/nats_top/">
+            
+                <a href="../nats_tools/nats_top/">
+            
+                    
+                    nats-top
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="5.5.1" data-path="../nats_tools/nats_top/nats-top-tutorial.html">
+            
+                <a href="../nats_tools/nats_top/nats-top-tutorial.html">
+            
+                    
+                    Tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5.6" data-path="../nats_tools/natsbench.html">
+            
+                <a href="../nats_tools/natsbench.html">
+            
+                    
+                    nats-bench
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">NATS Streaming Concepts</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../nats_streaming/intro.html">
+            
+                <a href="../nats_streaming/intro.html">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../nats_streaming/relation-to-nats.html">
+            
+                <a href="../nats_streaming/relation-to-nats.html">
+            
+                    
+                    Relation to NATS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../nats_streaming/client-connections.html">
+            
+                <a href="../nats_streaming/client-connections.html">
+            
+                    
+                    Client Connections
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.4" data-path="../nats_streaming/channels/channels.html">
+            
+                <a href="../nats_streaming/channels/channels.html">
+            
+                    
+                    Channels
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.4.1" data-path="../nats_streaming/channels/message-log.html">
+            
+                <a href="../nats_streaming/channels/message-log.html">
+            
+                    
+                    Message Log
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.4.2" data-path="../nats_streaming/channels/subscriptions/subscriptions.html">
+            
+                <a href="../nats_streaming/channels/subscriptions/subscriptions.html">
+            
+                    
+                    Subscriptions
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.4.2.1" data-path="../nats_streaming/channels/subscriptions/regular.html">
+            
+                <a href="../nats_streaming/channels/subscriptions/regular.html">
+            
+                    
+                    Regular
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.4.2.2" data-path="../nats_streaming/channels/subscriptions/durable.html">
+            
+                <a href="../nats_streaming/channels/subscriptions/durable.html">
+            
+                    
+                    Durable
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.4.2.3" data-path="../nats_streaming/channels/subscriptions/queue-group.html">
+            
+                <a href="../nats_streaming/channels/subscriptions/queue-group.html">
+            
+                    
+                    Queue Group
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.4.2.4" data-path="../nats_streaming/channels/subscriptions/redelivery.html">
+            
+                <a href="../nats_streaming/channels/subscriptions/redelivery.html">
+            
+                    
+                    Redelivery
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="6.5" data-path="../nats_streaming/store-interface.html">
+            
+                <a href="../nats_streaming/store-interface.html">
+            
+                    
+                    Store Interface
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.6" data-path="../nats_streaming/store-encryption.html">
+            
+                <a href="../nats_streaming/store-encryption.html">
+            
+                    
+                    Store Encryption
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.7" data-path="../nats_streaming/clustering/clustering.html">
+            
+                <a href="../nats_streaming/clustering/clustering.html">
+            
+                    
+                    Clustering
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.7.1" data-path="../nats_streaming/clustering/supported-stores.html">
+            
+                <a href="../nats_streaming/clustering/supported-stores.html">
+            
+                    
+                    Supported Stores
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.7.2" data-path="../nats_streaming/clustering/configuration.html">
+            
+                <a href="../nats_streaming/clustering/configuration.html">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.7.3" data-path="../nats_streaming/clustering/auto-configuration.html">
+            
+                <a href="../nats_streaming/clustering/auto-configuration.html">
+            
+                    
+                    Auto Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.7.4" data-path="../nats_streaming/clustering/containers.html">
+            
+                <a href="../nats_streaming/clustering/containers.html">
+            
+                    
+                    Containers
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="6.8" data-path="../nats_streaming/fault-tolerance/ft.html">
+            
+                <a href="../nats_streaming/fault-tolerance/ft.html">
+            
+                    
+                    Fault Tolerance
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.8.1" data-path="../nats_streaming/fault-tolerance/active-server.html">
+            
+                <a href="../nats_streaming/fault-tolerance/active-server.html">
+            
+                    
+                    Active Server
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.8.2" data-path="../nats_streaming/fault-tolerance/standby-server.html">
+            
+                <a href="../nats_streaming/fault-tolerance/standby-server.html">
+            
+                    
+                    Standby Servers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.8.3" data-path="../nats_streaming/fault-tolerance/shared-state.html">
+            
+                <a href="../nats_streaming/fault-tolerance/shared-state.html">
+            
+                    
+                    Shared State
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.8.4" data-path="../nats_streaming/fault-tolerance/failover.html">
+            
+                <a href="../nats_streaming/fault-tolerance/failover.html">
+            
+                    
+                    Failover
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="6.9" data-path="../nats_streaming/partitioning.html">
+            
+                <a href="../nats_streaming/partitioning.html">
+            
+                    
+                    Partitioning
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.10" data-path="../nats_streaming/monitoring/monitoring.html">
+            
+                <a href="../nats_streaming/monitoring/monitoring.html">
+            
+                    
+                    Monitoring
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.10.1" data-path="../nats_streaming/monitoring/endpoints.html">
+            
+                <a href="../nats_streaming/monitoring/endpoints.html">
+            
+                    
+                    Endpoints
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Developing With NATS Streaming</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../developer/streaming/">
+            
+                <a href="../developer/streaming/">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../developer/streaming/connecting.html">
+            
+                <a href="../developer/streaming/connecting.html">
+            
+                    
+                    Connecting to NATS Streaming
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../developer/streaming/publishing.html">
+            
+                <a href="../developer/streaming/publishing.html">
+            
+                    
+                    Publishing to a Channel
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="../developer/streaming/receiving.html">
+            
+                <a href="../developer/streaming/receiving.html">
+            
+                    
+                    Receiving Messages from a Channel
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="../developer/streaming/durables.html">
+            
+                <a href="../developer/streaming/durables.html">
+            
+                    
+                    Durable Subscriptions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="../developer/streaming/queues.html">
+            
+                <a href="../developer/streaming/queues.html">
+            
+                    
+                    Queue Subscriptions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.7" data-path="../developer/streaming/acks.html">
+            
+                <a href="../developer/streaming/acks.html">
+            
+                    
+                    Acknowledgements
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.8" data-path="../developer/streaming/protocol.html">
+            
+                <a href="../developer/streaming/protocol.html">
+            
+                    
+                    The Streaming Protocol
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">NATS Streaming Server</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../nats_streaming/gettingstarted/changes.html">
+            
+                <a href="../nats_streaming/gettingstarted/changes.html">
+            
+                    
+                    Important Changes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="../nats_streaming/gettingstarted/install.html">
+            
+                <a href="../nats_streaming/gettingstarted/install.html">
+            
+                    
+                    Installing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" data-path="../nats_streaming/gettingstarted/run.html">
+            
+                <a href="../nats_streaming/gettingstarted/run.html">
+            
+                    
+                    Running
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4" data-path="../nats_streaming/configuring/configuring.html">
+            
+                <a href="../nats_streaming/configuring/configuring.html">
+            
+                    
+                    Configuring
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.4.1" data-path="../nats_streaming/configuring/cmdline.html">
+            
+                <a href="../nats_streaming/configuring/cmdline.html">
+            
+                    
+                    Command line arguments
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4.2" data-path="../nats_streaming/configuring/cfgfile.html">
+            
+                <a href="../nats_streaming/configuring/cfgfile.html">
+            
+                    
+                    Configuration file
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4.3" data-path="../nats_streaming/configuring/storelimits.html">
+            
+                <a href="../nats_streaming/configuring/storelimits.html">
+            
+                    
+                    Store Limits
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.4.3.1" data-path="../nats_streaming/configuring/storelimits.html">
+            
+                <a href="../nats_streaming/configuring/storelimits.html#limits-inheritance">
+            
+                    
+                    Limits inheritance
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4.4" data-path="../nats_streaming/configuring/persistence.html">
+            
+                <a href="../nats_streaming/configuring/persistence.html">
+            
+                    
+                    Persistence
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.4.4.1" data-path="../nats_streaming/configuring/filestore.html">
+            
+                <a href="../nats_streaming/configuring/filestore.html">
+            
+                    
+                    File Store
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.4.4.1.1" data-path="../nats_streaming/configuring/filestore.html">
+            
+                <a href="../nats_streaming/configuring/filestore.html#options">
+            
+                    
+                    Options
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4.4.1.2" data-path="../nats_streaming/configuring/filestore.html">
+            
+                <a href="../nats_streaming/configuring/filestore.html#recovery-errors">
+            
+                    
+                    Recovery Errors
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4.4.2" data-path="../nats_streaming/configuring/sqlstore.html">
+            
+                <a href="../nats_streaming/configuring/sqlstore.html">
+            
+                    
+                    SQL Store
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.4.4.2.1" data-path="../nats_streaming/configuring/sqlstore.html">
+            
+                <a href="../nats_streaming/configuring/sqlstore.html#read-and-write-timeouts">
+            
+                    
+                    Read and Write Timeouts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4.4.2.2" data-path="../nats_streaming/configuring/sqlstore.html">
+            
+                <a href="../nats_streaming/configuring/sqlstore.html#options">
+            
+                    
+                    Options
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4.5" data-path="../nats_streaming/configuring/tls.html">
+            
+                <a href="../nats_streaming/configuring/tls.html">
+            
+                    
+                    Securing
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.4.5.1" data-path="../nats_streaming/configuring/tls.html">
+            
+                <a href="../nats_streaming/configuring/tls.html#authenticating-users">
+            
+                    
+                    Authenticating Users
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4.5.2" data-path="../nats_streaming/configuring/tls.html">
+            
+                <a href="../nats_streaming/configuring/tls.html#using-tls">
+            
+                    
+                    TLS
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="8.5" data-path="../nats_streaming/gettingstarted/process-signaling.html">
+            
+                <a href="../nats_streaming/gettingstarted/process-signaling.html">
+            
+                    
+                    Process Signaling
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.6" data-path="../nats_streaming/gettingstarted/windows-service.html">
+            
+                <a href="../nats_streaming/gettingstarted/windows-service.html">
+            
+                    
+                    Windows Service
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.7" data-path="../developer/streaming/embedding.html">
+            
+                <a href="../developer/streaming/embedding.html">
+            
+                    
+                    Embedding NATS Streaming Server
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.8" data-path="../nats_streaming/swarm.html">
+            
+                <a href="../nats_streaming/swarm.html">
+            
+                    
+                    Docker Swarm
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">NATS Protocol</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="nats-protocol-demo.html">
+            
+                <a href="nats-protocol-demo.html">
+            
+                    
+                    Protocol Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="nats-protocol.html">
+            
+                <a href="nats-protocol.html">
+            
+                    
+                    Client Protocol
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="9.2.1" data-path="nats-client-dev.html">
+            
+                <a href="nats-client-dev.html">
+            
+                    
+                    Developing a Client
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter active" data-level="9.3" data-path="nats-server-protocol.html">
+            
+                <a href="nats-server-protocol.html">
+            
+                    
+                    NATS Cluster Protocol
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >NATS Cluster Protocol</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="nats-cluster-protocol"><a name="nats-cluster-protocol" class="plugin-anchor" href="#nats-cluster-protocol"><i class="fa fa-link" aria-hidden="true"></i></a>NATS Cluster Protocol</h2>
+<p>NATS&#x670D;&#x52A1;&#x5668;&#x96C6;&#x7FA4;&#x534F;&#x8BAE;&#x63CF;&#x8FF0;&#x5728;<a href="../nats_server/clustering.html">cluster</a>&#x5185;&#x7684;NATS&#x670D;&#x52A1;&#x5668;&#x4E4B;&#x95F4;&#x4F20;&#x9012;&#x7684;&#x534F;&#x8BAE;&#xFF0C;&#x7528;&#x4E8E;&#x5171;&#x4EAB;&#x5173;&#x4E8E;&#x65B0;&#x670D;&#x52A1;&#x5668;&#x7684;&#x5E10;&#x6237;&#x3001;&#x8BA2;&#x9605;&#x3001;&#x8F6C;&#x53D1;&#x6D88;&#x606F;&#x548C;&#x5171;&#x4EAB;&#x96C6;&#x7FA4;&#x62D3;&#x6251;&#x3002;&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x57FA;&#x4E8E;&#x6587;&#x672C;&#x7684;&#x534F;&#x8BAE;&#x3002;
+&#x670D;&#x52A1;&#x5668;&#x4E4B;&#x95F4;&#x901A;&#x8FC7;&#x5E38;&#x89C4;TCP/IP&#x6216;TLS&#x5957;&#x63A5;&#x5B57;&#x8FDB;&#x884C;&#x901A;&#x4FE1;&#xFF0C;&#x4F7F;&#x7528;&#x4E00;&#x7EC4;&#x7531;&#x6362;&#x884C;&#x7EC8;&#x6B62;&#x7684;&#x534F;&#x8BAE;&#x64CD;&#x4F5C;&#x3002;</p>
+<p>NATS&#x670D;&#x52A1;&#x5668;&#x5B9E;&#x73B0;&#x4E86;&#x4E00;&#x4E2A;&#x5FEB;&#x901F;&#x9AD8;&#x6548;&#x7684;<a href="https://youtu.be/ylRKac5kSOk?t=10m46s" target="_blank">&#x96F6;&#x5206;&#x914D;&#x5B57;&#x8282;&#x89E3;&#x6790;&#x5668;</a>&#x3002;</p>
+<p>NATS cluster &#x534F;&#x8BAE;&#x4E0E;NATS&#x5BA2;&#x6237;&#x7AEF;&#x534F;&#x8BAE;&#x975E;&#x5E38;&#x76F8;&#x4F3C;&#x3002; &#x5728;cluster&#x7684;&#x4E0A;&#x4E0B;&#x6587;&#x4E2D;&#xFF0C;&#x53EF;&#x4EE5;&#x5C06;&#x670D;&#x52A1;&#x5668;&#x770B;&#x4F5C;&#x4EE3;&#x8868;&#x5176;&#x8FDE;&#x63A5;&#x7684;&#x5BA2;&#x6237;&#x7AEF;&#x64CD;&#x4F5C;&#x7684;&#x4EE3;&#x7406;&#xFF0C;&#x8BA2;&#x9605;&#x3001;&#x53D6;&#x6D88;&#x8BA2;&#x9605;&#x3001;&#x53D1;&#x9001;&#x548C;&#x63A5;&#x6536;&#x6D88;&#x606F;&#x3002;</p>
+<h2 id="nats-cluster-&#x534F;&#x8BAE;&#x7EA6;&#x5B9A;"><a name="nats-cluster-&#x534F;&#x8BAE;&#x7EA6;&#x5B9A;" class="plugin-anchor" href="#nats-cluster-&#x534F;&#x8BAE;&#x7EA6;&#x5B9A;"><i class="fa fa-link" aria-hidden="true"></i></a>NATS Cluster &#x534F;&#x8BAE;&#x7EA6;&#x5B9A;</h2>
+<p><strong>&#x4E3B;&#x9898;&#x540D;&#x79F0;&#x4E0E;&#x901A;&#x914D;&#x7B26;</strong>: NATS&#x96C6;&#x7FA4;&#x534F;&#x8BAE;&#x5728;&#x4E3B;&#x9898;&#x540D;&#x79F0;&#x548C;&#x901A;&#x914D;&#x7B26;&#x65B9;&#x9762;&#x5177;&#x6709;&#x4E0E;&#x5BA2;&#x6237;&#x7AEF;&#x76F8;&#x540C;&#x7684;&#x7279;&#x6027;&#x548C;&#x9650;&#x5236;&#x3002;
+&#x5BA2;&#x6237;&#x7AEF;&#x7ED1;&#x5B9A;&#x5230;&#x4E00;&#x4E2A;&#x5E10;&#x6237;&#xFF0C;&#x4F46;&#x662F;&#x96C6;&#x7FA4;&#x534F;&#x8BAE;&#x5904;&#x7406;&#x6240;&#x6709;&#x5E10;&#x6237;&#x3002;</p>
+<p><strong>&#x5B57;&#x6BB5;&#x5206;&#x9694;&#x7B26;</strong>: NATS&#x534F;&#x8BAE;&#x6D88;&#x606F;&#x7684;&#x5B57;&#x6BB5;&#x7531;&#x7A7A;&#x683C;&#x5B57;&#x7B26;&apos;<code>`&apos; (&#x7A7A;&#x683C;&#x7B26;)  or</code>\t` (tab)&#x5206;&#x9694;&#x3002;&#x591A;&#x4E2A;&#x7A7A;&#x767D;&#x5B57;&#x7B26;&#x5C06;&#x88AB;&#x89C6;&#x4E3A;&#x5355;&#x4E2A;&#x5B57;&#x6BB5;&#x5206;&#x9694;&#x7B26;&#x3002;</p>
+<p><strong>&#x65B0;&#x884C;</strong>: &#x4E0E;&#x5176;&#x4ED6;&#x57FA;&#x4E8E;&#x6587;&#x672C;&#x7684;&#x534F;&#x8BAE;&#x4E00;&#x6837;&#xFF0C;NATS&#x4F7F;&#x7528;<code>CR</code>&#x540E;&#x8DDF;<code>LF</code>(<code>CR+LF</code>, <code>\r\n</code>, <code>0x0D0A</code>)&#x6765;&#x7EC8;&#x6B62;&#x534F;&#x8BAE;&#x6D88;&#x606F;&#x3002;
+&#x8FD9;&#x4E2A;&#x6362;&#x884C;&#x7B26;&#x8FD8;&#x7528;&#x4E8E;&#x5728;<code>RMSG</code>&#x534F;&#x8BAE;&#x6D88;&#x606F;&#x4E2D;&#x6807;&#x8BB0;&#x5B9E;&#x9645;&#x6D88;&#x606F;payload&#x7684;&#x5F00;&#x59CB;&#x3002;</p>
+<h2 id="nats-cluster-&#x534F;&#x8BAE;&#x6D88;&#x606F;"><a name="nats-cluster-&#x534F;&#x8BAE;&#x6D88;&#x606F;" class="plugin-anchor" href="#nats-cluster-&#x534F;&#x8BAE;&#x6D88;&#x606F;"><i class="fa fa-link" aria-hidden="true"></i></a>NATS Cluster &#x534F;&#x8BAE;&#x6D88;&#x606F;</h2>
+<p>&#x4E0B;&#x8868;&#x7B80;&#x8981;&#x63CF;&#x8FF0;&#x4E86;NATS cluster &#x534F;&#x8BAE;&#x6D88;&#x606F;&#x3002;
+&#x4E0E;&#x5728;&#x5BA2;&#x6237;&#x7AEF;&#x534F;&#x8BAE;&#x4E2D;&#x4E00;&#x6837;&#xFF0C;NATS&#x534F;&#x8BAE;&#x64CD;&#x4F5C;&#x540D;&#x4E0D;&#x533A;&#x5206;&#x5927;&#x5C0F;&#x5199;&#xFF0C;&#x56E0;&#x6B64; <code>SUB foo 1\r\n</code> &#x4E0E; <code>sub foo 1\r\n</code>&#x662F;&#x7B49;&#x4EF7;&#x7684;&#x3002;
+&#x70B9;&#x51FB;&#x540D;&#x79F0;&#x67E5;&#x770B;&#x66F4;&#x8BE6;&#x7EC6;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x5305;&#x62EC;&#x8BED;&#x6CD5;:</p>
+<table>
+<thead>
+<tr>
+<th>OP Name</th>
+<th style="text-align:left">Sent By</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#info"><code>INFO</code></a></td>
+<td style="text-align:left">All Servers</td>
+<td style="text-align:left">&#x521D;&#x59CB;TCP/IP&#x8FDE;&#x63A5;&#x540E;&#x53D1;&#x9001;&#x5E76;&#x66F4;&#x65B0;&#x96C6;&#x7FA4;&#x77E5;&#x8BC6;</td>
+</tr>
+<tr>
+<td><a href="#connect"><code>CONNECT</code></a></td>
+<td style="text-align:left">All Servers</td>
+<td style="text-align:left">&#x5EFA;&#x7ACB;&#x8FDE;&#x63A5;</td>
+</tr>
+<tr>
+<td><a href="#sub"><code>RS+</code></a></td>
+<td style="text-align:left">All Servers</td>
+<td style="text-align:left">&#x4EE3;&#x8868;&#x611F;&#x5174;&#x8DA3;&#x7684;&#x5BA2;&#x6237;&#x7AEF;&#x4E3A;&#x7ED9;&#x5B9A;&#x5E10;&#x6237;&#x8BA2;&#x9605;&#x4E3B;&#x9898;&#x3002;</td>
+</tr>
+<tr>
+<td><a href="#unsub"><code>RS-</code></a></td>
+<td style="text-align:left">All Servers</td>
+<td style="text-align:left">&#x53D6;&#x6D88;&#x5BF9;&#x7ED9;&#x5B9A;&#x5E10;&#x6237;&#x7684;&#x4E3B;&#x9898;&#x7684;&#x8BA2;&#x9605;(&#x6216;&#x81EA;&#x52A8;&#x53D6;&#x6D88;&#x8BA2;&#x9605;)&#x3002;</td>
+</tr>
+<tr>
+<td><a href="#rmsg"><code>RMSG</code></a></td>
+<td style="text-align:left">Origin Server</td>
+<td style="text-align:left">&#x5C06;&#x7ED9;&#x5B9A;&#x4E3B;&#x9898;&#x548C;&#x5E10;&#x6237;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x7ED9;&#x53E6;&#x4E00;&#x53F0;&#x670D;&#x52A1;&#x5668;&#x3002;</td>
+</tr>
+<tr>
+<td><a href="#pingpong"><code>PING</code></a></td>
+<td style="text-align:left">All Servers</td>
+<td style="text-align:left">PING &#x5305;&#x6D3B;&#x6D88;&#x606F;</td>
+</tr>
+<tr>
+<td><a href="#pingpong"><code>PONG</code></a></td>
+<td style="text-align:left">All Servers</td>
+<td style="text-align:left">PONG &#x5305;&#x6D3B;&#x56DE;&#x590D;&#x6D88;&#x606F;</td>
+</tr>
+<tr>
+<td><a href="#-err"><code>-ERR</code></a></td>
+<td style="text-align:left">All Servers</td>
+<td style="text-align:left">&#x6307;&#x793A;&#x534F;&#x8BAE;&#x9519;&#x8BEF;&#x3002;&#x53EF;&#x80FD;&#x5BFC;&#x81F4;&#x8FDC;&#x7A0B;&#x670D;&#x52A1;&#x5668;&#x65AD;&#x5F00;&#x8FDE;&#x63A5;&#x3002;</td>
+</tr>
+</tbody>
+</table>
+<p>&#x4E0B;&#x9762;&#x51E0;&#x8282;&#x89E3;&#x91CA;&#x6BCF;&#x4E2A;&#x534F;&#x8BAE;&#x6D88;&#x606F;&#x3002;</p>
+<h2 id="info"><a name="info" class="plugin-anchor" href="#info"><i class="fa fa-link" aria-hidden="true"></i></a>INFO</h2>
+<h4 id="&#x63CF;&#x8FF0;"><a name="&#x63CF;&#x8FF0;" class="plugin-anchor" href="#&#x63CF;&#x8FF0;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x63CF;&#x8FF0;</h4>
+<p>&#x4E00;&#x65E6;&#x670D;&#x52A1;&#x5668;&#x63A5;&#x53D7;&#x6765;&#x81EA;&#x53E6;&#x4E00;&#x53F0;&#x670D;&#x52A1;&#x5668;&#x7684;&#x8FDE;&#x63A5;&#xFF0C;&#x5B83;&#x5C31;&#x4F1A;&#x53D1;&#x9001;&#x5173;&#x4E8E;&#x81EA;&#x5DF1;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x4EE5;&#x53CA;&#x5176;&#x4ED6;&#x670D;&#x52A1;&#x5668;&#x6210;&#x529F;&#x901A;&#x8FC7;&#x670D;&#x52A1;&#x5668;&#x8EAB;&#x4EFD;&#x9A8C;&#x8BC1;&#x548C;&#x4EA4;&#x6362;&#x6D88;&#x606F;&#x6240;&#x9700;&#x7684;&#x914D;&#x7F6E;&#x548C;&#x5B89;&#x5168;&#x9700;&#x6C42;&#x3002;
+&#x8FDE;&#x63A5;&#x670D;&#x52A1;&#x5668;&#x8FD8;&#x53D1;&#x9001;&#x4E00;&#x6761;<code>INFO</code>&#x6D88;&#x606F;&#x3002;&#x63A5;&#x53D7;&#x670D;&#x52A1;&#x5668;&#x5C06;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;<code>ip</code>&#x5B57;&#x6BB5;&#xFF0C;&#x5176;&#x4E2D;&#x5305;&#x542B;&#x8FDE;&#x63A5;&#x670D;&#x52A1;&#x5668;&#x7684;&#x5730;&#x5740;&#x548C;&#x7AEF;&#x53E3;&#xFF0C;&#x5E76;&#x5C06;&#x65B0;&#x670D;&#x52A1;&#x5668;&#x7684;<code>INFO</code>&#x6D88;&#x606F;&#x8F6C;&#x53D1;&#x5230;&#x5B83;&#x8DEF;&#x7531;&#x5230;&#x7684;&#x6240;&#x6709;&#x670D;&#x52A1;&#x5668;&#x3002;
+&#x96C6;&#x7FA4;&#x4E2D;&#x7684;&#x4EFB;&#x4F55;&#x670D;&#x52A1;&#x5668;&#x5982;&#x679C;&#x63A5;&#x6536;&#x5230;&#x5E26;&#x6709;<code>ip</code>&#x5B57;&#x6BB5;&#x7684;<code>INFO</code>&#x6D88;&#x606F;&#xFF0C;&#x90FD;&#x5C06;&#x5C1D;&#x8BD5;&#x8FDE;&#x63A5;&#x5230;&#x8BE5;&#x5730;&#x5740;&#x7684;&#x670D;&#x52A1;&#x5668;&#xFF0C;&#x9664;&#x975E;&#x5DF2;&#x7ECF;&#x8FDE;&#x63A5;&#x3002;&#x8FD9;&#x79CD;&#x4EE3;&#x8868;&#x8FDE;&#x63A5;&#x670D;&#x52A1;&#x5668;&#x7684;
+<code>INFO</code>&#x6D88;&#x606F;&#x4F20;&#x64AD;&#x63D0;&#x4F9B;&#x4E86;&#x52A0;&#x5165;&#x96C6;&#x7FA4;&#x7684;&#x65B0;&#x670D;&#x52A1;&#x5668;&#x7684;&#x81EA;&#x52A8;&#x53D1;&#x73B0;&#x3002;</p>
+<h4 id="&#x8BED;&#x6CD5;"><a name="&#x8BED;&#x6CD5;" class="plugin-anchor" href="#&#x8BED;&#x6CD5;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x8BED;&#x6CD5;</h4>
+<p><code>INFO {[&quot;option_name&quot;:option_value],...}</code></p>
+<p>&#x6709;&#x6548;&#x7684;&#x9009;&#x9879;&#x5982;&#x4E0B;:</p>
+<ul>
+<li><code>server_id</code>: NATS &#x670D;&#x52A1;&#x5668;&#x7684;&#x552F;&#x4E00;&#x6807;&#x8BC6;&#x7B26;</li>
+<li><code>version</code>: NATS&#x670D;&#x52A1;&#x5668;&#x7684;&#x7248;&#x672C;</li>
+<li><code>go</code>: &#x6784;&#x5EFA; NATS &#x670D;&#x52A1;&#x5668;&#x7684; golang &#x7248;&#x672C;</li>
+<li><code>host</code>: &#x7FA4;&#x96C6;&#x53C2;&#x6570;/&#x9009;&#x9879;&#x4E2D;&#x6307;&#x5B9A;&#x7684;&#x4E3B;&#x673A;</li>
+<li><code>port</code>: &#x7AEF;&#x53E3;&#x53F7;</li>
+<li><code>auth_required</code>: &#x5982;&#x679C;&#x8BBE;&#x7F6E;&#x4E86;&#x8FD9;&#x4E2A;&#xFF0C;&#x90A3;&#x4E48;&#x670D;&#x52A1;&#x5668;&#x5E94;&#x8BE5;&#x5C1D;&#x8BD5;&#x5728;&#x8FDE;&#x63A5;&#x65F6;&#x8FDB;&#x884C;&#x8EAB;&#x4EFD;&#x9A8C;&#x8BC1;&#x3002;</li>
+<li><code>tls_required</code>: &#x5982;&#x679C;&#x8BBE;&#x7F6E;&#x4E86;&#x8FD9;&#x4E2A;&#x53C2;&#x6570;&#xFF0C;&#x90A3;&#x4E48;&#x670D;&#x52A1;&#x5668;&#x5FC5;&#x987B;&#x4F7F;&#x7528;TLS&#x8FDB;&#x884C;&#x8EAB;&#x4EFD;&#x9A8C;&#x8BC1;&#x3002;</li>
+<li><code>max_payload</code>: &#x670D;&#x52A1;&#x5668;&#x5C06;&#x63A5;&#x53D7;&#x7684;&#x6700;&#x5927; payload &#x5927;&#x5C0F;&#x3002;</li>
+<li><code>connect_urls</code> : &#x5BA2;&#x6237;&#x7AEF;&#x53EF;&#x4EE5;&#x8FDE;&#x63A5;&#x5230;&#x7684;&#x670D;&#x52A1;&#x5668;url&#x5217;&#x8868;&#x3002;</li>
+<li><code>ip</code>:  &#x670D;&#x52A1;&#x5668;&#x7684;&#x53EF;&#x9009;&#x8DEF;&#x7531;&#x8FDE;&#x63A5;&#x5730;&#x5740;&#xFF0C; <code>nats-route://<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>hostname</span><span class="token punctuation">&gt;</span></span>:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>port</span><span class="token punctuation">&gt;</span></span></code></li>
+</ul>
+<h4 id="&#x4E3E;&#x4F8B;"><a name="&#x4E3E;&#x4F8B;" class="plugin-anchor" href="#&#x4E3E;&#x4F8B;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x4E3E;&#x4F8B;</h4>
+<p>&#x4E0B;&#x9762;&#x662F;&#x4E00;&#x4E2A;&#x7531;NATS&#x670D;&#x52A1;&#x5668;&#x63A5;&#x6536;&#x7684;&#x5E26;&#x6709;<code>ip</code>&#x5B57;&#x6BB5;&#x7684;<code>INFO</code>&#x5B57;&#x7B26;&#x4E32;&#x793A;&#x4F8B;&#x3002;</p>
+<p><code>INFO {&quot;server_id&quot;:&quot;KP19vTlB417XElnv8kKaC5&quot;,&quot;version&quot;:&quot;2.0.0&quot;,&quot;go&quot;:&quot;&quot;,&quot;host&quot;:&quot;localhost&quot;,&quot;port&quot;:5222,&quot;auth_required&quot;:false,&quot;tls_required&quot;:false,&quot;tls_verify&quot;:false,&quot;max_payload&quot;:1048576,&quot;ip&quot;:&quot;nats-route://127.0.0.1:5222/&quot;,&quot;connect_urls&quot;:[&quot;localhost:4222&quot;]}</code></p>
+<h2 id="connect"><a name="connect" class="plugin-anchor" href="#connect"><i class="fa fa-link" aria-hidden="true"></i></a>CONNECT</h2>
+<h4 id="&#x63CF;&#x8FF0;"><a name="&#x63CF;&#x8FF0;" class="plugin-anchor" href="#&#x63CF;&#x8FF0;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x63CF;&#x8FF0;</h4>
+<p><code>CONNECT</code>&#x6D88;&#x606F;&#x7C7B;&#x4F3C;&#x4E8E;<a href="#INFO"><code>INFO</code></a>&#x6D88;&#x606F;&#x3002;&#x4E00;&#x65E6; NATS &#x670D;&#x52A1;&#x5668;&#x4E0E;&#x53E6;&#x4E00;&#x53F0;&#x670D;&#x52A1;&#x5668;&#x5EFA;&#x7ACB;&#x4E86;TCP/IP&#x8FDE;&#x63A5;&#xFF0C;&#x5E76;&#x4E14;&#x63A5;&#x6536;&#x5230;&#x4E00;&#x6761;<a href="#INFO"><code>INFO</code></a>&#x6D88;&#x606F;&#xFF0C;
+&#x670D;&#x52A1;&#x5668;&#x5C06;&#x53D1;&#x9001;&#x4E00;&#x6761;<code>CONNECT</code>&#x6D88;&#x606F;&#xFF0C;&#x4EE5;&#x63D0;&#x4F9B;&#x5173;&#x4E8E;&#x5F53;&#x524D;&#x8FDE;&#x63A5;&#x548C;&#x5B89;&#x5168;&#x4FE1;&#x606F;&#x7684;&#x66F4;&#x591A;&#x4FE1;&#x606F;&#x3002;</p>
+<h4 id="&#x8BED;&#x6CD5;"><a name="&#x8BED;&#x6CD5;" class="plugin-anchor" href="#&#x8BED;&#x6CD5;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x8BED;&#x6CD5;</h4>
+<p><code>CONNECT {[&quot;option_name&quot;:option_value],...}</code></p>
+<p>&#x4E0B;&#x9762;&#x662F;&#x6709;&#x6548;&#x7684;&#x9009;&#x9879;:</p>
+<ul>
+<li><code>tls_required</code>: &#x6307;&#x793A;&#x670D;&#x52A1;&#x5668;&#x662F;&#x5426;&#x9700;&#x8981;SSL&#x8FDE;&#x63A5;&#x3002;</li>
+<li><code>auth_token</code>:  &#x6388;&#x6743;&#x4EE4;&#x724C;</li>
+<li><code>user</code>: &#x8FDE;&#x63A5;&#x7528;&#x6237;&#x540D;(&#x5982;&#x679C;&#x8BBE;&#x7F6E;&#x4E86;<code>auth_required</code>)</li>
+<li><code>pass</code>: &#x8FDE;&#x63A5;&#x5BC6;&#x7801;(&#x5982;&#x679C;&#x8BBE;&#x7F6E;&#x4E86;<code>auth_required</code>)</li>
+<li><code>name</code>: &#x751F;&#x6210;&#x7684;&#x670D;&#x52A1;&#x5668;&#x540D;</li>
+<li><code>lang</code>: &#x670D;&#x52A1;&#x5668;&#x7684;&#x5B9E;&#x73B0;&#x8BED;&#x8A00;(go).</li>
+<li><code>version</code>: &#x670D;&#x52A1;&#x5668;&#x7684;&#x7248;&#x672C;&#x3002;</li>
+</ul>
+<h4 id="&#x4F8B;&#x5B50;"><a name="&#x4F8B;&#x5B50;" class="plugin-anchor" href="#&#x4F8B;&#x5B50;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x4F8B;&#x5B50;</h4>
+<p>&#x4E0B;&#x9762;&#x662F;&#x6765;&#x81EA;&#x670D;&#x52A1;&#x5668;&#x7684;&#x9ED8;&#x8BA4;&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x4E00;&#x4E2A;&#x793A;&#x4F8B;&#x3002;</p>
+<p><code>CONNECT {&quot;tls_required&quot;:false,&quot;name&quot;:&quot;wt0vffeQyoDGMVBC2aKX0b&quot;}\r\n</code></p>
+<h2 id="rs"><a name="rs" class="plugin-anchor" href="#rs"><i class="fa fa-link" aria-hidden="true"></i></a><a name="SUB"></a>RS+</h2>
+<h4 id="&#x63CF;&#x8FF0;"><a name="&#x63CF;&#x8FF0;" class="plugin-anchor" href="#&#x63CF;&#x8FF0;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x63CF;&#x8FF0;</h4>
+<p><code>RS+</code>&#x5728;&#x7ED9;&#x5B9A;&#x5E10;&#x6237;&#x4E0A;&#x542F;&#x52A8;&#x5BF9;&#x4E3B;&#x9898;&#x7684;&#x8BA2;&#x9605;&#xFF0C;&#x53EF;&#x4EE5;&#x9009;&#x62E9;&#x4F7F;&#x7528;&#x5206;&#x5E03;&#x5F0F;&#x961F;&#x5217;&#x7EC4;&#x540D;&#x79F0;&#x548C;&#x6743;&#x91CD;&#x56E0;&#x5B50;&#x3002;
+&#x6CE8;&#x610F;&#xFF0C;&#x961F;&#x5217;&#x8BA2;&#x9605;&#x5C06;&#x4F7F;&#x7528;RS+&#x6765;&#x589E;&#x52A0;&#x548C;&#x51CF;&#x5C11;&#x961F;&#x5217;&#x6743;&#x91CD;&#xFF0C;&#x9664;&#x975E;&#x6743;&#x91CD;&#x56E0;&#x5B50;&#x4E3A;0&#x3002;</p>
+<h4 id="&#x8BED;&#x6CD5;"><a name="&#x8BED;&#x6CD5;" class="plugin-anchor" href="#&#x8BED;&#x6CD5;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x8BED;&#x6CD5;</h4>
+<p><strong>&#x8BA2;&#x9605;</strong>: <code>RS+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>account</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>subject</span><span class="token punctuation">&gt;</span></span>\r\n</code></p>
+<p><strong>&#x961F;&#x5217;&#x8BA2;&#x9605;</strong>: <code>RS+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>account</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>subject</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>queue</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>weight</span><span class="token punctuation">&gt;</span></span>\r\n</code></p>
+<p>where:</p>
+<ul>
+<li><code>account</code>: &#x4E3B;&#x9898;&#x5174;&#x8DA3;&#x5173;&#x8054;&#x7684;&#x8D26;&#x6237;</li>
+<li><code>subject</code>: &#x4E3B;&#x9898;</li>
+<li><code>queue</code>: &#x961F;&#x5217;&#x540D;&#x79F0;</li>
+<li><code>weight</code>: &#x53EF;&#x9009;&#x7684;&#x961F;&#x5217;&#x7EC4;&#x6743;&#x91CD;&#xFF0C;&#x8868;&#x793A;&#x6709;&#x591A;&#x5C11; &#x5174;&#x8DA3;/&#x8BA2;&#x9605;&#x8005;</li>
+</ul>
+<h2 id="rs-"><a name="rs-" class="plugin-anchor" href="#rs-"><i class="fa fa-link" aria-hidden="true"></i></a><a name="UNSUB"></a>RS-</h2>
+<h4 id="&#x63CF;&#x8FF0;"><a name="&#x63CF;&#x8FF0;" class="plugin-anchor" href="#&#x63CF;&#x8FF0;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x63CF;&#x8FF0;</h4>
+<p><code>RS-</code> &#x7ED9;&#x5B9A;&#x8D26;&#x53F7;&#x4E0A;&#x53D6;&#x6D88;&#x8BA2;&#x9605;&#x6307;&#x5B9A;&#x4E3B;&#x9898;&#x3002;&#x5F53;&#x670D;&#x52A1;&#x5668;&#x4E0D;&#x518D;&#x5BF9;&#x7ED9;&#x5B9A;&#x7684;&#x4E3B;&#x9898;&#x611F;&#x5174;&#x8DA3;&#x65F6;&#xFF0C;&#x5C31;&#x4F1A;&#x53D1;&#x9001;&#x5B83;&#x3002;</p>
+<h4 id="&#x8BED;&#x6CD5;"><a name="&#x8BED;&#x6CD5;" class="plugin-anchor" href="#&#x8BED;&#x6CD5;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x8BED;&#x6CD5;</h4>
+<p><strong>Subscription</strong>: <code>RS- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>account</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>subject</span><span class="token punctuation">&gt;</span></span>\r\n</code></p>
+<p>where:</p>
+<ul>
+<li><code>account</code>: &#x4E3B;&#x9898;&#x7684;&#x8D26;&#x53F7;</li>
+<li><code>subject</code>: &#x4E3B;&#x9898;</li>
+</ul>
+<h2 id="rmsg"><a name="rmsg" class="plugin-anchor" href="#rmsg"><i class="fa fa-link" aria-hidden="true"></i></a>RMSG</h2>
+<h4 id="description"><a name="description" class="plugin-anchor" href="#description"><i class="fa fa-link" aria-hidden="true"></i></a>Description</h4>
+<p> <code>RMSG</code> &#x534F;&#x8BAE;&#x6D88;&#x606F;&#x662F;&#x53D1;&#x9001;&#x6D88;&#x606F;&#x7ED9;&#x53E6;&#x5916;&#x4E00;&#x4E2A;&#x670D;&#x52A1;&#x7AEF;</p>
+<h4 id="&#x8BED;&#x6CD5;"><a name="&#x8BED;&#x6CD5;" class="plugin-anchor" href="#&#x8BED;&#x6CD5;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x8BED;&#x6CD5;</h4>
+<p><code>RMSG <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>account</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>subject</span><span class="token punctuation">&gt;</span></span> [reply-to] <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>#bytes</span><span class="token punctuation">&gt;</span></span>\r\n[payload]\r\n</code></p>
+<p>where:</p>
+<ul>
+<li><code>account</code>: &#x4E3B;&#x9898;&#x7684;&#x8D26;&#x53F7;</li>
+<li><code>subject</code>: &#x4E3B;&#x9898;</li>
+<li><code>reply-to</code>: &#x53EF;&#x9009;&#x7684;&#x56DE;&#x590D;&#x4E3B;&#x9898;</li>
+<li><code>#bytes</code>: payload &#x7684;&#x5927;&#x5C0F;&#xFF0C;&#x5355;&#x4F4D;&#x662F; bytes</li>
+<li><code>payload</code>:  payload &#x6570;&#x636E;</li>
+</ul>
+<h2 id="pingpong"><a name="pingpong" class="plugin-anchor" href="#pingpong"><i class="fa fa-link" aria-hidden="true"></i></a>PING/PONG</h2>
+<h4 id="description"><a name="description" class="plugin-anchor" href="#description"><i class="fa fa-link" aria-hidden="true"></i></a>Description</h4>
+<p><code>PING</code>&#x548C;<code>PONG</code>&#x5728;&#x670D;&#x52A1;&#x5668;&#x4E4B;&#x95F4;&#x5B9E;&#x73B0;&#x4E86;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x5305;&#x6D3B;&#x673A;&#x5236;&#x3002;&#x4E00;&#x65E6;&#x4E24;&#x53F0;&#x670D;&#x52A1;&#x5668;&#x5F7C;&#x6B64;&#x5EFA;&#x7ACB;&#x8FDE;&#x63A5;&#xFF0C;NATS&#x670D;&#x52A1;&#x5668;&#x5C06;&#x4EE5;&#x914D;&#x7F6E;&#x7684;&#x65F6;&#x95F4;&#x95F4;&#x9694;&#x4E0D;&#x65AD;&#x5730;&#x5411;&#x5176;&#x4ED6;&#x670D;&#x52A1;&#x5668;&#x53D1;&#x9001;<code>PING</code>&#x6D88;&#x606F;&#x3002;
+&#x5982;&#x679C;&#x5176;&#x4ED6;&#x670D;&#x52A1;&#x5668;&#x672A;&#x80FD;&#x5728;&#x914D;&#x7F6E;&#x7684;&#x54CD;&#x5E94;&#x95F4;&#x9694;&#x5185;&#x54CD;&#x5E94;<code>PONG</code>&#x6D88;&#x606F;&#xFF0C;&#x5219;&#x670D;&#x52A1;&#x5668;&#x5C06;&#x7EC8;&#x6B62;&#x5176;&#x8FDE;&#x63A5;&#x3002;&#x5982;&#x679C;&#x60A8;&#x7684;&#x8FDE;&#x63A5;&#x95F2;&#x7F6E;&#x592A;&#x4E45;&#xFF0C;&#x5C31;&#x4F1A;&#x88AB;&#x5207;&#x65AD;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x53E6;&#x4E00;&#x4E2A;&#x670D;&#x52A1;&#x5668;&#x53D1;&#x9001;ping&#x8BF7;&#x6C42;&#xFF0C;&#x670D;&#x52A1;&#x5668;&#x5C06;&#x4F7F;&#x7528;pong&#x6D88;&#x606F;&#x8FDB;&#x884C;&#x54CD;&#x5E94;&#xFF0C;&#x901A;&#x77E5;&#x53E6;&#x4E00;&#x4E2A;&#x670D;&#x52A1;&#x5668;&#x5B83;&#x4ECD;&#x7136;&#x5B58;&#x5728;&#x3002;</p>
+<h4 id="syntax"><a name="syntax" class="plugin-anchor" href="#syntax"><i class="fa fa-link" aria-hidden="true"></i></a>Syntax</h4>
+<p><code>PING\r\n</code>
+<code>PONG\r\n</code></p>
+<h2 id="err"><a name="err" class="plugin-anchor" href="#err"><i class="fa fa-link" aria-hidden="true"></i></a>-ERR</h2>
+<h4 id="&#x63CF;&#x8FF0;"><a name="&#x63CF;&#x8FF0;" class="plugin-anchor" href="#&#x63CF;&#x8FF0;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x63CF;&#x8FF0;</h4>
+<p>&#x670D;&#x52A1;&#x5668;&#x4F7F;&#x7528;<code>-ERR</code>&#x6D88;&#x606F;&#x6307;&#x793A;&#x5230;&#x53E6;&#x4E00;&#x53F0;&#x670D;&#x52A1;&#x5668;&#x7684;&#x534F;&#x8BAE;&#x3001;&#x6388;&#x6743;&#x6216;&#x5176;&#x4ED6;&#x8FD0;&#x884C;&#x65F6;&#x8FDE;&#x63A5;&#x9519;&#x8BEF;&#x3002;&#x5927;&#x591A;&#x6570;&#x9519;&#x8BEF;&#x5BFC;&#x81F4;&#x8FDC;&#x7A0B;&#x670D;&#x52A1;&#x5668;&#x5173;&#x95ED;&#x8FDE;&#x63A5;&#x3002;</p>
+<p>&#x672C;&#x4EBA;&#x7FFB;&#x8BD1;&#x6C34;&#x5E73;&#x6709;&#x9650;&#xFF0C;&#x8BFB;&#x8005;&#x670B;&#x53CB;&#x5B9E;&#x5728;&#x770B;&#x4E0D;&#x61C2;&#x4E86;&#xFF0C;&#x8BF7;&#x53C2;&#x8003;<a href="https://github.com/nats-io/docs/blob/master/nats_protocol/nats-server-protocol.md" target="_blank">&#x539F;&#x6587;</a></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="nats-client-dev.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Developing a Client">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"NATS Cluster Protocol","level":"9.3","depth":1,"previous":{"title":"Developing a Client","level":"9.2.1","depth":2,"path":"nats_protocol/nats-client-dev.md","ref":"nats_protocol/nats-client-dev.md","articles":[]},"dir":"ltr"},"config":{"plugins":["prism","-sharing","-highlight","include-html","toggle-chapters","anchors","edit-link"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{"lang":{"ascii":"markup","text":"markup"}},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"include-html":{},"fontsettings":{"theme":"white","family":"sans","size":2},"edit-link":{"label":"edit","base":"https://github.com/nats-io/docs/edit/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"toggle-chapters":{}},"theme":"default","author":"The NATS Maintainers","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"NATS","gitbook":"*","description":"Administrative, developer and conceptual documentation for the NATS messaging system."},"file":{"path":"nats_protocol/nats-server-protocol.md","mtime":"2019-09-24T08:08:37.714Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-10-18T07:46:12.019Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+<!-- Viz Support -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/viz.js"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/lite.render.js"> </script>
+
+<!-- Site code -->
+<script>
+    function flash(elem, text, speed) {
+        if (!elem) {
+            return;
+        }
+        var s = elem.style;
+        elem.textContent = text;
+        s.display = 'block';
+        s.opacity = 1;
+        (function fade() {
+            (s.opacity -= .1) < .1 ? s.display = "none" : setTimeout(fade, speed)
+        })();
+    }
+
+    function copyToClipboard(text, el) {
+        var copyTest = document.queryCommandSupported('copy');
+        var elOriginalText = el.getAttribute('data-original-title');
+
+        if (copyTest === true) {
+            var copyTextArea = document.createElement("textarea");
+            copyTextArea.value = text;
+            document.body.appendChild(copyTextArea);
+            copyTextArea.select();
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'Copied!' : 'Whoops, not copied!';
+                var parent = el.parentNode.parentNode;
+                var msgElem = parent.querySelector(".copy-msg");
+                flash(msgElem, msg, 100);
+            } catch (err) {
+                console.log('Oops, unable to copy', err);
+            }
+            document.body.removeChild(copyTextArea);
+            el.setAttribute('data-original-title', elOriginalText);
+        } else {
+            // Fallback if browser doesn't support .execCommand('copy')
+            window.prompt("Copy to clipboard: Ctrl+C or Command+C, Enter", text);
+        }
+    }
+
+    function processGraphVizSections(elements) {
+        var elements = document.querySelectorAll("[data-viz]");
+        var viz = new Viz();
+        Array.prototype.forEach.call(elements, function (x) {
+            var engine = x.getAttribute("data-viz");
+            var image = viz.renderImageElement(x.innerText, {
+                format: "png",
+                engine: engine
+            }).then(function (element) {
+                x.parentNode.insertBefore(element, x);
+            });
+        });
+
+
+    };
+
+    function updateLanguageParameter(value) {
+        const param = "lang";
+
+        if (window.location.href.indexOf("?") >= 0) {
+            const regExp = new RegExp(param + "(.+?)(&|$)", "g");
+            const newUrl = window.location.href.replace(regExp, param + "=" + encodeURIComponent(value) + "$2");
+            window.history.pushState("", "", newUrl);
+        } else {
+            const newUrl = window.location.href + "?" + param + "=" + encodeURIComponent(value);
+            window.history.pushState("", "", newUrl);
+        }
+    }
+
+    function getLanguageParameter() {
+        var match = RegExp('[?&]lang=([^&]*)').exec(window.location.search);
+        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+    }
+
+    function docReady() {
+        window.gitbook.events.bind("page.change", function () {
+            pageChanged();
+        });
+
+        var searchInput = document.querySelector('#book-search-input input');
+
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function(event) {
+                if (event.keyCode === 13) {
+                    event.target.blur();
+                }
+            });
+        }
+    }
+
+    function pageChanged() {
+        var logos = document.querySelectorAll(".nats");
+        if (logos && logos.length == 0) {
+            gitbook.toolbar.createButton({
+                icon: 'nats',
+                label: 'NATS Home Page',
+                position: 'right',
+                onClick: function () {
+                    var win = window.open("https://nats.io/", '_blank');
+                    win.focus();
+                }
+            });
+        }
+
+        document.querySelectorAll('.js-copy').forEach(elem => {
+            elem.addEventListener("click", function () {
+                var el = this;
+                var parent = this.parentNode.parentNode;
+                var code = parent.querySelector('code');
+                var text = code.textContent || code.innerText;
+                copyToClipboard(text, el);
+            })
+        });
+
+        document.querySelectorAll('.api-lang').forEach(elem => {
+            elem.addEventListener("click", function () {
+                var curLang = sessionStorage.getItem('nats-api-language');
+                var lang = this.getAttribute('data-language');
+
+                // Stop the infinite loop
+                if (curLang == lang) {
+                    return;
+                }
+
+                sessionStorage.setItem('nats-api-language', lang); // So we only do this 1x
+
+                updateLanguageParameter(lang)
+
+                document.querySelectorAll('.api-lang[data-language=' + lang + ']').forEach(elem => {
+                    elem.click();
+                });
+            })
+        });
+
+        if (sessionStorage) {
+            var curLang = sessionStorage.getItem('nats-api-language');
+            var queryLang = getLanguageParameter();
+            var lang = curLang;
+
+            if (queryLang) { // query takes precedent
+                lang = queryLang
+            }
+
+            if (lang) {
+                document.querySelectorAll('.api-lang[data-language=' + lang + ']').forEach(elem => {
+                    elem.click();
+                });
+            }
+        }
+
+        setTimeout(function () {
+            processGraphVizSections();
+        }, 1);
+    }
+
+
+    if (document.readyState != 'loading') docReady();
+    else if (document.addEventListener) document.addEventListener('DOMContentLoaded', docReady);
+    else document.attachEvent('onreadystatechange', function () {
+        if (document.readyState == 'complete') docReady();
+    });
+</script>
+
+<!-- Github Buttons -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Styles -->
+<style>
+    .nats {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url(https://nats.io/img/nats-icon-color.svg);
+        background-size: 16px 16px;
+        background-repeat: no-repeat;
+    }
+
+    div.graphviz {
+        background: transparent;
+        border: 0;
+        padding-top: 15px;
+        padding-right: 15px;
+        padding-bottom: 25px;
+        padding-left: 15px;
+        text-align: center;
+    }
+
+    code[data-viz] {
+        display: none;
+    }
+
+    .tab-wrap {
+        transition: 0.3s box-shadow ease;
+        border-radius: 6px;
+        max-width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        list-style: none;
+        background-color: #fff;
+        margin: 20px 0;
+        /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);*/
+    }
+
+    .tab-wrap:hover {
+        box-shadow: 0 12px 23px rgba(0, 0, 0, 0.23), 0 10px 10px rgba(0, 0, 0, 0.19);
+    }
+
+    .tab {
+        display: none;
+    }
+
+    /* Using scss these would be generated, we have to manually create enough for all tabs, start with 8 */
+    .tab:checked:nth-of-type(1)~.tab__content:nth-of-type(1) {
+        opacity: 1;
+        transition: 0.5s opacity ease-in, 0.8s -webkit-transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease, 0.8s -webkit-transform ease;
+        position: relative;
+        top: 0;
+        z-index: 100;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+        text-shadow: 0 0 0;
+    }
+
+    .tab:checked:nth-of-type(2)~.tab__content:nth-of-type(2) {
+        opacity: 1;
+        transition: 0.5s opacity ease-in, 0.8s -webkit-transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease, 0.8s -webkit-transform ease;
+        position: relative;
+        top: 0;
+        z-index: 100;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+        text-shadow: 0 0 0;
+    }
+
+    .tab:checked:nth-of-type(3)~.tab__content:nth-of-type(3) {
+        opacity: 1;
+        transition: 0.5s opacity ease-in, 0.8s -webkit-transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease, 0.8s -webkit-transform ease;
+        position: relative;
+        top: 0;
+        z-index: 100;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+        text-shadow: 0 0 0;
+    }
+
+    .tab:checked:nth-of-type(4)~.tab__content:nth-of-type(4) {
+        opacity: 1;
+        transition: 0.5s opacity ease-in, 0.8s -webkit-transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease, 0.8s -webkit-transform ease;
+        position: relative;
+        top: 0;
+        z-index: 100;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+        text-shadow: 0 0 0;
+    }
+
+    .tab:checked:nth-of-type(5)~.tab__content:nth-of-type(5) {
+        opacity: 1;
+        transition: 0.5s opacity ease-in, 0.8s -webkit-transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease, 0.8s -webkit-transform ease;
+        position: relative;
+        top: 0;
+        z-index: 100;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+        text-shadow: 0 0 0;
+    }
+
+    .tab:checked:nth-of-type(6)~.tab__content:nth-of-type(6) {
+        opacity: 1;
+        transition: 0.5s opacity ease-in, 0.8s -webkit-transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease, 0.8s -webkit-transform ease;
+        position: relative;
+        top: 0;
+        z-index: 100;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+        text-shadow: 0 0 0;
+    }
+
+    .tab:checked:nth-of-type(7)~.tab__content:nth-of-type(7) {
+        opacity: 1;
+        transition: 0.5s opacity ease-in, 0.8s -webkit-transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease, 0.8s -webkit-transform ease;
+        position: relative;
+        top: 0;
+        z-index: 100;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+        text-shadow: 0 0 0;
+    }
+
+    .tab:checked:nth-of-type(8)~.tab__content:nth-of-type(8) {
+        opacity: 1;
+        transition: 0.5s opacity ease-in, 0.8s -webkit-transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease;
+        transition: 0.5s opacity ease-in, 0.8s transform ease, 0.8s -webkit-transform ease;
+        position: relative;
+        top: 0;
+        z-index: 100;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+        text-shadow: 0 0 0;
+    }
+
+    .tab:first-of-type:not(:last-of-type)+label {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .tab:not(:first-of-type):not(:last-of-type)+label {
+        border-radius: 0;
+    }
+
+    .tab:last-of-type:not(:first-of-type)+label {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .tab:checked+label {
+        background-color: #fff;
+        box-shadow: 0 -1px 0 #fff inset;
+        cursor: default;
+        font-weight: bold;
+        border: 1px solid #ddd;
+        border-bottom-color: transparent;
+    }
+
+    .tab:checked+label:hover {
+        box-shadow: 0 -1px 0 #fff inset;
+        background-color: #fff;
+    }
+
+    .tab+label {
+        box-shadow: 0 -1px 0 #eee inset;
+        border-radius: 6px 6px 0 0;
+        cursor: pointer;
+        display: block;
+        text-decoration: none;
+        color: #27aae1;
+        flex-grow: 3;
+        text-align: center;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        text-align: center;
+        transition: 0.3s background-color ease, 0.3s box-shadow ease;
+        height: 50px;
+        box-sizing: border-box;
+        padding: 15px;
+    }
+
+    .tab+label:hover {
+        background-color: #f9f9f9;
+        box-shadow: 0 1px 0 #f4f4f4 inset;
+    }
+
+    .tab__content {
+        padding: 2px 2px;
+        background-color: transparent;
+        position: absolute;
+        width: 100%;
+        z-index: -1;
+        opacity: 0;
+        left: 0;
+        -webkit-transform: translateY(-3px);
+        transform: translateY(-3px);
+        border-radius: 6px;
+    }
+
+    .tab__content pre {
+        margin-bottom: 0px !important;
+    }
+
+    .toolbar-icons {
+        display: inline-block;
+        position: relative;
+        padding-left: 4px;
+    }
+
+    a.toolbar-icons {
+        text-decoration: none;
+    }
+
+    .toolbar-icons .mdi {
+        color: #4183c4;
+    }
+
+    .copy-msg {
+        color: #4183c4;
+    }
+
+    .pull-right {
+        float: right !important;
+    }
+
+    .pull-left {
+        float: left !important;
+    }
+</style>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111730698-1"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+
+ gtag('config', 'UA-111730698-1');
+</script>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-toggle-chapters/toggle.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

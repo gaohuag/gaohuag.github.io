@@ -40,10 +40,8 @@ NATS提供了两个 _通配符_ ，可以代替点分隔主题中的一个或多
 
 ### 匹配单个 Token
 
-The first wildcard is `*` which will match a single token.
- For example, if an application wanted to listen for eastern time zones, they could subscribe to `time.*.east`, 
  which would match `time.us.east` and `time.eu.east`.
-第一个通配符是 `*`，它将匹配单个令牌。例如，如果一个应用程序想要监听东部时区，他们可以订阅“`time.*.east`。
+第一个通配符是 `*`，它将匹配单个token。例如，如果一个应用程序想要监听东部时区，他们可以订阅 `time.*.east`。
 匹配`time.us.east` 和 `time.eu.east`。
 
 <div class="graphviz"><code data-viz="dot">
@@ -62,10 +60,6 @@ digraph g {
 
 ### 匹配多个令牌
 
-The second wildcard is `>` which will match one or more tokens, and can only appear at the end of the subject. 
-For example, `time.us.>` will match `time.us.east` and `time.us.east.atlanta`,
- 
- while `time.us.*` would only match `time.us.east` since it can't match more than one token.
 第二个通配符是 `>` ，它将匹配一个或多个标记，并且只能出现在主题的末尾。
 例如,“`time.us.>`将匹配 `time.us.east` and `time.us.east.atlanta`,而`time.us.*` 只配得上`time.us.east` 。因为它只能匹配一个符号。
 

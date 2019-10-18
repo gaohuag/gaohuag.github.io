@@ -1,8 +1,7 @@
 # 探索 NATS 发布/订阅
 
-NATS is a publish subscribe messaging system. Subscribers listening on a subject receive messages on that subject. If the subscriber is not actively listening on the subject, the message is not received. Subscribers can use the wildcard tokens such as  `*` and `>` to match a single token or to match the tail of a subject.
-NATS是一个发布订阅消息系统。监听某个主题的订阅者将收到该主题的消息。如果订阅者没有积极地订阅主题，消息将不会被接收。
-订阅者可以使用通配符`*`来匹配单个令牌，或使用`>`匹配主题的尾部。
+NATS是一个发布订阅消息系统。监听某个主题的订阅者将收到该主题的消息。如果订阅者没有在线订阅主题，消息将不会被接收。
+订阅者可以使用通配符`*`来匹配单个token，或使用`>`匹配主题的尾部。
 
 <div class="graphviz"><code data-viz="dot">
 digraph nats_pub_sub {

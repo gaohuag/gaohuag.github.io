@@ -4,5 +4,5 @@
 
  * [探索NATS发布/订阅](pubsub.md)
  * [探讨NATS的请求/回复](reqreply.md)
- * [探索NATS排队](queues.md)
+ * [探索NATS队列](queues.md)
  * [Go中的高级连接和自定义拨号](custom_dialer.md)

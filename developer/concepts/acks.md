@@ -1,6 +1,8 @@
-# Acknowledgements
+# 确认
 
-In a system with at-most-once semantics, there are times when messages can be lost. If your application is doing request-reply it should use timeouts to handle any network or application failures. It is always a good idea to place a timeout on a requests and have code that deals with timeouts. When you are publishing an event or data stream, one way to ensure message delivery is to turn it into a request-reply with the concept of an acknowledgement message, or ACKs. In NATS an ACK can simply be an empty message, a message with no payload.
+在具有最多一次语义的系统中，有时会丢失消息。如果您的应用程序正在执行请求-应答，那么它应该使用超时来处理任何网络或应用程序故障。
+在请求上设置超时并使用处理超时的代码总是一个好主意。在发布事件或数据流时，确保消息送达的一种方法是将其转换为带有确认消息(ACKs)概念的请求-应答。
+在NATS中，ACK可以是一个空消息，一个没有有效负载的消息。
 
 <div class="graphviz"><code data-viz="dot">
 digraph nats_request_reply {
@@ -28,4 +30,5 @@ digraph nats_request_reply {
 }
 </code></div>
 
-Because the ACK can be empty it can take up very little network bandwidth, but the idea of the ACK turns a simple fire-and-forget into a fire-and-know world where the sender can be sure that the message was received by the other side, or with a [scatter-gather pattern](reqreply.md), several other sides.
+因为 ACK 可以是空的，所以占用非常小的网络带宽,但ACK的想法由简单的 fire-and-forget 变成fire-and-know世界,
+发送方可以确定消息被收到,浏览[scatter-gather pattern](reqreply.md)了解其他几个方面。

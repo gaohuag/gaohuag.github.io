@@ -1,10 +1,14 @@
-# Advanced Connect and Custom Dialer in Go
+# 高级连接和使用 go 自定义拨号
 
-The Go NATS client features a [CustomDialer](https://godoc.org/github.com/nats-io/go-nats#CustomDialer) option which allows you to customize
-the connection logic against the NATS server without having to modify the internals
-of the client. For example, let's say that you want to make the client use the `context`
-package to use `DialContext` and be able to cancel connecting to NATS altogether with a deadline,
-you could then do define a Dialer implementation as follows:
+Go NATS客户端有一个 [CustomDialer](https://godoc.org/github.com/nats-io/go-nats#CustomDialer) 选项，允许您自定义
+                                                                                        
+针对NATS服务器的连接的逻辑，而无需修改客户端的内部机制
+
+。例如，假设您想让客户端使用 `context`
+
+包使用`DialContext`，并能够在到达最后期限的时候取消连接到NATS，
+
+你可以定义一个拨号器，实现如下:
 
 ```go
 package main
@@ -51,8 +55,9 @@ func (cd *customDialer) Dial(network, address string) (net.Conn, error) {
 }
 ```
 
-With the dialer implementation above, the NATS client will retry a number of times to connect
-to the NATS server until the context is no longer valid:
+有了上面的拨号器实现，NATS客户端将重试若干次来连接
+
+到NATS服务器，直到上下文不再有效:
 
 ```go
 func main() {

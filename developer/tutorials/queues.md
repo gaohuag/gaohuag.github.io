@@ -1,18 +1,19 @@
-# Explore NATS Queueing
+# 探索 NATS 队列
 
-NATS supports a form of load balancing using queue groups. Subscribers register a queue group name. A single subscriber in the group is randomly selected to receive the message.
+NATS支持使用队列组实现负载平衡。订阅者注册队列组名。组中随机选择一个订阅者来接收消息。
 
-## Prerequisites
+## 先决条件
 
-Go and the NATS server should be installed.
+Go和NATS服务器应该被安装。
 
-### 1. Start the NATS server
+### 1. 启动NATS服务器
+       
 
 ```sh
 nats-server
 ```
 
-### 2. Clone the repositories for each client examples
+### 2. 为每个客户端示例克隆存储库
 
 ```sh
 go get github.com/nats-io/nats.go
@@ -20,14 +21,14 @@ git clone https://github.com/nats-io/nats.js.git
 git clone https://github.com/nats-io/nats.rb.git
 ```
 
-### 3. Run the Go client subscriber with queue group name
+### 3. 运行具有队列组名称的Go客户端订阅者
 
 ```sh
 cd $GOPATH/src/github.com/nats-io/nats.go/examples
 go run nats-qsub/main.go foo my-queue
 ```
 
-### 4. Install and run the Node client subscriber with queue group name
+### 4. 安装并运行具有队列组名称的node客户端订阅者
 
 ```sh
 npm install nats
@@ -35,37 +36,37 @@ cd nats.js/examples
 node node-sub --queue=my-queue foo
 ```
 
-### 5. Install and run the Ruby client subscriber with queue group name
+### 5. 安装并运行具有队列组名称的Ruby客户端订阅者
 
 ```sh
 gem install nats
 nats-queue foo my-queue &
 ```
 
-### 6. Run another Go client subscriber *without* the queue group.
+### 6. 运行另一个 *没有* 队列组的Go客户端订阅者.
 
 ```sh
 cd $GOPATH/src/github.com/nats-io/nats.go/examples
 go run nats-sub/main.go foo
 ```
 
-### 7. Publish a NATS message using the Go client
+### 7. 使用Go客户端发布NATS消息
 
 ```sh
 cd $GOPATH/src/github.com/nats-io/nats.go/examples
 go run nats-pub/main.go foo "Hello NATS!"
 ```
 
-### 8. Verify message publication and receipt
+### 8. 验证消息发布和接收
 
-You should see that the publisher sends the message: *Published [foo] : 'Hello NATS!'*
+您应该看到发布者发送消息: *Published [foo] : 'Hello NATS!'*
 
-You should see that only one of the my-queue group subscribers receives the message. In addition, the Go client subscriber not in the my-queue group should also receive the message.
 
-### 9. Publish another message
+您应该看到，my-queue组订阅者中只有一个收到消息。此外，不在my-queue组中的Go客户机订阅者也应该接收到了消息。
+### 9. 发布另一个消息
 
 ```sh
 go run nats-pub/main.go foo "Hello NATS Again!"
 ```
 
-You should see that a different queue group subscriber receives the message this time, chosen at random among the 3 queue group members.
+您应该看到，这次是在3个队列组成员中随机选择的另一个队列组订阅者接收消息。

@@ -1,6 +1,6 @@
 build: init examples
 	rm -rf _.docs
-	gitbook build . _docs
+	gitbook build . docs
 	
 init:
 	gitbook install
