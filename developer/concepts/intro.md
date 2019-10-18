@@ -1,10 +1,5 @@
 # 什么是NATS
 
-NATS messaging enables the exchange of data that is segmented into messages among computer applications and services. 
-These messages are addressed by subjects and do not depend on network location. 
-This provides an abstraction layer between the application or service and the underlying physical network. 
-Data is encoded and framed as a message and sent by a publisher. 
-The message is received, decoded, and processed by one or more subscribers.
 NATS消息传递使得计算机应用程序和服务把交互的数据隔离出来。
 消息解决的是主题问题，不依赖于网络位置。
 这提供了应用程序或服务与底层物理网络之间的抽象层。

@@ -19,14 +19,16 @@ NATS服务器实现了一个快速高效的[零分配字节解析器](https://yo
 **新行**: NATS 使用 `CR` 跟着 `LF` (`CR+LF`, `\r\n`, `0x0D0A`) 终止协议消息。在 `PUB` or `MSG` 协议消息中新行序列也用来标识消息负荷结束.
 
 **主题名称**: 主题名称, 包括回复主题(收件箱) 名称, 是大小写敏感的并且必须是非空的不包含空白字符的字母数字字符串。
-所有的 ascii 字母数字字符除了 spaces/tabs 并且允许使用"." and ">" 分割主题。
+所有的 ascii 字母数字字符除了 spaces/tabs 并且允许使用"." 和 ">" 分割主题。
 例如:
 
 `FOO`, `BAR`, `foo.bar`, `foo.BAR`, `FOO.BAR` 和 `FOO.BAR.BAZ` 都是有效的主题名
 
 `FOO. BAR`, `foo. .bar` 和 `foo..bar` *不是* 有效的主题名
 
-A subject is comprised of 1 or more tokens. Tokens are separated by "." and can be any non space ascii alphanumeric character. The full wildcard token ">" is only valid as the last token and matches all tokens past that point. A token wildcard, "*" matches any token in the position it was listed. Wildcard tokens should only be used in a wildcard capacity and not part of a literal token.
+
+一个主题由一个或多个tokens组成。tokens由“.”分隔，可以是任何非空格的ascii字母数字字符。完整的通配符令牌“>”仅作为最后一个token有效，
+并匹配超过该点的所有token。通配符“*”匹配单个token,匹配它所列出位置中的任何token。发布主题中不应该包换 "*"和“>"。
 
 **字符编码**: 为了实现最大的互操作性，主题名称应该是ascii字符。由于语言和性能的限制，一些客户机可能支持UTF-8主题名，服务器也可能支持。不提供非ascii支持的保证。
 
