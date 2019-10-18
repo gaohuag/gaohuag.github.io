@@ -1,23 +1,23 @@
-# Summary
+# 概览
 
-* [Introduction](README.md)
-* [What's New in 2.0](whats_new/whats_new_20.md)
+* [简介](README.md)
+* [2.0有什么新功能](whats_new/whats_new_20.md)
 * [FAQ](faq.md)
 * [nats.io](https://nats.io)
 
-## Concepts
+## 概念
 
-* [What is NATS](developer/concepts/intro.md)
-* [Subject-Based Messaging](developer/concepts/subjects.md)
-* [Publish-Subscribe](developer/concepts/pubsub.md)
-* [Request-Reply](developer/concepts/reqreply.md)
-* [Queue Groups](developer/concepts/queue.md)
-* [Acknowledgements](developer/concepts/acks.md)
-* [Sequence Numbers](developer/concepts/seq_num.md)
+* [什么是NATS](developer/concepts/intro.md)
+* [基于subject的消息传递](developer/concepts/subjects.md)
+* [发布-订阅](developer/concepts/pubsub.md)
+* [请求-响应](developer/concepts/reqreply.md)
+* [队列组](developer/concepts/queue.md)
+* [消息确认](developer/concepts/acks.md)
+* [序号](developer/concepts/seq_num.md)
 
 ## Developing With NATS
 
-* [Introduction](developer/README.md)
+* [简介](developer/README.md)
 
 * [Connecting](developer/connecting/intro.md)
   * [Connecting to the Default Server](developer/connecting/default_server.md)
@@ -64,19 +64,19 @@
   * [Listen for Connection Events](developer/events/events.md)
   * [Slow Consumers](developer/events/slow.md)
 
-* [Tutorials](developer/tutorials/intro.md)
-  * [Explore NATS Pub/Sub](developer/tutorials/pubsub.md)
-  * [Explore NATS Request/Reply](developer/tutorials/reqreply.md)
-  * [Explore NATS Queueing](developer/tutorials/queues.md)
-  * [Advanced Connect and Custom Dialer in Go](developer/tutorials/custom_dialer.md)
+* [教程](developer/tutorials/intro.md)
+  * [探索NATS发布/订阅](developer/tutorials/pubsub.md)
+  * [探索NATS请求/响应](developer/tutorials/reqreply.md)
+  * [探索NATS队列组](developer/tutorials/queues.md)
+  * [高级连接和在Go中自定义拨号](developer/tutorials/custom_dialer.md)
 
 ## NATS Server
 
-* [Installing](nats_server/installation.md)
-* [Running](nats_server/running.md)
+* [安装](nats_server/installation.md)
+* [运行](nats_server/running.md)
   * [Window Service](nats_server/windows_srv.md)
-* [Clients](nats_server/clients.md)
-* [Flags](nats_server/flags.md)
+* [客户端](nats_server/clients.md)
+* [参数](nats_server/flags.md)
 * [Configuration](nats_server/configuration.md)
   * [Securing NATS](nats_server/securing_nats.md)
     * [Enabling TLS](nats_server/tls.md)
@@ -98,14 +98,14 @@
     * [Configuration](leafnodes/leafnode_conf.md)
   * [Logging](nats_server/logging.md)
   * [Monitoring](nats_server/monitoring.md)
-* [Managing A NATS Server](nats_admin/README.md)
+* [管理 NATS 服务器](nats_admin/README.md)
   * [Upgrading a Cluster](nats_admin/upgrading_cluster.md)
   * [Slow Consumers](nats_admin/slow_consumers.md)
   * [Signals](nats_admin/signals.md)
   * [System Accounts](sys_accounts/README.md)
     * [Configuration](sys_accounts/sys_accounts.md)
-* [NATS and Docker](nats_docker/README.md)
-  * [Tutorial](nats_docker/nats-docker-tutorial.md)
+* [NATS 和 Docker](nats_docker/README.md)
+  * [教程](nats_docker/nats-docker-tutorial.md)
   * [Docker Swarm](nats_docker/docker_swarm.md)
 
 ## NATS Tools
@@ -191,9 +191,9 @@
 * [Embedding NATS Streaming Server](developer/streaming/embedding.md)
 * [Docker Swarm](nats_streaming/swarm.md)
 
-## NATS Protocol
+## NATS 协议
 
-* [Protocol Demo](nats_protocol/nats-protocol-demo.md)
-* [Client Protocol](nats_protocol/nats-protocol.md)
-  * [Developing a Client](nats_protocol/nats-client-dev.md)
-* [NATS Cluster Protocol](nats_protocol/nats-server-protocol.md)
+* [协议示例](nats_protocol/nats-protocol-demo.md)
+* [客户端协议](nats_protocol/nats-protocol.md)
+  * [开发一个客户端](nats_protocol/nats-client-dev.md)
+* [NATS 集群协议](nats_protocol/nats-server-protocol.md)
